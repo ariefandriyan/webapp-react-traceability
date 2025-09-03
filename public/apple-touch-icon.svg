@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" width="180" height="180">
+  <defs>
+    <linearGradient id="leafGradientApple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+      <stop offset="25%" style="stop-color:#16a34a;stop-opacity:1" />
+      <stop offset="75%" style="stop-color:#15803d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14532d;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="bgGradient" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" style="stop-color:#f0fdf4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dcfce7;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="180" height="180" fill="url(#bgGradient)" rx="32" ry="32"/>
+  
+  <!-- Main tobacco leaf -->
+  <path d="M45 157.5 C45 157.5, 22.5 112.5, 33.75 67.5 C45 22.5, 90 11.25, 135 33.75 C157.5 45, 168.75 67.5, 157.5 90 C146.25 112.5, 112.5 135, 90 146.25 C67.5 157.5, 45 157.5, 45 157.5 Z" 
+        fill="url(#leafGradientApple)" 
+        stroke="#166534" 
+        stroke-width="2"/>
+  
+  <!-- Main vein -->
+  <path d="M56.25 135 Q78.75 112.5, 101.25 90 Q123.75 67.5, 135 45" 
+        stroke="#166534" 
+        stroke-width="3.5" 
+        fill="none"/>
+  
+  <!-- Secondary veins -->
+  <path d="M67.5 123.75 Q84.375 106.875, 101.25 90" 
+        stroke="#166534" 
+        stroke-width="2.25" 
+        fill="none"/>
+  <path d="M78.75 112.5 Q90 101.25, 101.25 90" 
+        stroke="#166534" 
+        stroke-width="1.75" 
+        fill="none"/>
+  
+  <!-- Highlights -->
+  <ellipse cx="112.5" cy="67.5" rx="10" ry="5" fill="#22c55e" opacity="0.5"/>
+  <ellipse cx="101.25" cy="78.75" rx="6" ry="3" fill="#34d399" opacity="0.4"/>
+</svg>

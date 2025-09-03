@@ -4,8 +4,12 @@ import { useAuth } from '../hooks/useAuth';
 import { FormController } from '../controllers/formController';
 import { NavigationController } from '../controllers/navigationController';
 import { LoginCredentials } from '../types/auth';
+import { useDocumentTitle } from '../lib/useDocumentTitle';
 
 const LoginPage: React.FC = () => {
+  // Set document title
+  useDocumentTitle('Login - Tobacco Traceability System');
+
   const navigate = useNavigate();
   const { login, loginWithGoogle, user, isLoading, error, clearError } = useAuth();
   

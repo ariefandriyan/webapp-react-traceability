@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="leafGradient192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#16a34a;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#15803d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#14532d;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="rgba(0,0,0,0.3)"/>
+    </filter>
+  </defs>
+  
+  <!-- Main tobacco leaf shape with shadow -->
+  <path d="M48 168 C48 168, 24 120, 36 72 C48 24, 96 12, 144 36 C168 48, 180 72, 168 96 C156 120, 120 144, 96 156 C72 168, 48 168, 48 168 Z" 
+        fill="url(#leafGradient192)" 
+        stroke="#166534" 
+        stroke-width="3"
+        filter="url(#shadow)"/>
+  
+  <!-- Main central vein -->
+  <path d="M60 144 Q84 120, 108 96 Q132 72, 144 48" 
+        stroke="#166534" 
+        stroke-width="4" 
+        fill="none"/>
+  
+  <!-- Secondary veins -->
+  <path d="M72 132 Q90 114, 108 96" 
+        stroke="#166534" 
+        stroke-width="2.5" 
+        fill="none"/>
+  <path d="M84 120 Q96 108, 108 96" 
+        stroke="#166534" 
+        stroke-width="2" 
+        fill="none"/>
+  <path d="M96 108 Q102 102, 108 96" 
+        stroke="#166534" 
+        stroke-width="1.5" 
+        fill="none"/>
+  
+  <!-- Tertiary veins for detail -->
+  <path d="M78 126 Q87 117, 96 108" 
+        stroke="#166534" 
+        stroke-width="1" 
+        fill="none"/>
+  <path d="M90 114 Q99 105, 108 96" 
+        stroke="#166534" 
+        stroke-width="1" 
+        fill="none"/>
+  
+  <!-- Highlights for dimension -->
+  <ellipse cx="120" cy="72" rx="12" ry="6" fill="#22c55e" opacity="0.4"/>
+  <ellipse cx="108" cy="84" rx="8" ry="4" fill="#34d399" opacity="0.3"/>
+  
+  <!-- Subtle texture dots -->
+  <circle cx="75" cy="105" r="1" fill="#166534" opacity="0.3"/>
+  <circle cx="105" cy="75" r="1" fill="#166534" opacity="0.3"/>
+  <circle cx="90" cy="90" r="1" fill="#166534" opacity="0.3"/>
+</svg>

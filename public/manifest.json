@@ -1,0 +1,40 @@
+{
+  "name": "Tobacco Traceability System",
+  "short_name": "Tobacco Trace",
+  "description": "Sistem pelacakan komprehensif untuk industri tembakau dengan manajemen lahan, fase tanam, dan aksesibilitas infrastruktur",
+  "theme_color": "#16a34a",
+  "background_color": "#f0fdf4",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon-16.svg",
+      "sizes": "16x16",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "apple-touch-icon"
+    }
+  ],
+  "categories": ["agriculture", "productivity", "business"],
+  "lang": "id-ID",
+  "dir": "ltr"
+}

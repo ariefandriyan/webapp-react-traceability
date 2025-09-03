@@ -1,13 +1,19 @@
 {
-  "name": "vite-template",
+  "name": "tobacco-traceability-system",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Sistem pelacakan komprehensif untuk industri tembakau dengan manajemen lahan, fase tanam, dan aksesibilitas infrastruktur",
+  "keywords": ["tobacco", "traceability", "agriculture", "farming", "react", "typescript"],
+  "author": "Tobacco Traceability Team",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint --fix",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "npm run dev",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@heroui/button": "^2.2.24",

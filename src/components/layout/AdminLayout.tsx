@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Topbar from './Topbar';
 import Breadcrumb from './Breadcrumb';
 import ContentRenderer from './ContentRenderer';
+import { useDocumentTitle } from '../../lib/useDocumentTitle';
 
 interface MenuItem {
   id: string;
@@ -27,6 +28,13 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({
   currentPageTitle,
   breadcrumbItems = []
 }) => {
+  // Update document title based on current page
+  const titleSuffix = "Tobacco Traceability System";
+  const fullTitle = currentPageTitle 
+    ? `${currentPageTitle} - ${titleSuffix}` 
+    : titleSuffix;
+  useDocumentTitle(fullTitle);
+
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   
   const [activeMenuItem, setActiveMenuItem] = useState('dashboard');
