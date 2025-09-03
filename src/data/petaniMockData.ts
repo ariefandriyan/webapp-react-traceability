@@ -1,0 +1,282 @@
+import { Petani } from '../types/petani';
+
+export const mockPetaniData: Petani[] = [
+  {
+    id: '1',
+    nik: '3507124512850001',
+    nama: 'Suyono Wijaya',
+    tempatLahir: 'Malang',
+    tanggalLahir: '1985-12-14',
+    jenisKelamin: 'L',
+    alamat: 'Jl. Raya Tumpang No. 45',
+    desa: 'Tumpang',
+    kecamatan: 'Tumpang',
+    kabupaten: 'Malang',
+    provinsi: 'Jawa Timur',
+    kodePos: '65156',
+    noTelepon: '08123456789',
+    email: 'suyono.wijaya@gmail.com',
+    pendidikan: 'SMA',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 2.5,
+    kelompokTani: 'Tani Makmur Sejahtera',
+    statusAktif: true,
+    tanggalDaftar: '2020-03-15',
+    catatan: 'Petani berpengalaman dengan hasil panen stabil'
+  },
+  {
+    id: '2',
+    nik: '3508135603920002',
+    nama: 'Siti Aminah',
+    tempatLahir: 'Blitar',
+    tanggalLahir: '1992-03-16',
+    jenisKelamin: 'P',
+    alamat: 'Jl. Melati No. 12 RT 02 RW 01',
+    desa: 'Wonodadi',
+    kecamatan: 'Wonodadi',
+    kabupaten: 'Blitar',
+    provinsi: 'Jawa Timur',
+    kodePos: '66171',
+    noTelepon: '08234567890',
+    email: 'siti.aminah92@yahoo.com',
+    pendidikan: 'SMP',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Sewa',
+    luasLahan: 1.8,
+    kelompokTani: 'Harapan Bersama',
+    statusAktif: true,
+    tanggalDaftar: '2021-01-20',
+    catatan: 'Aktif dalam kegiatan kelompok tani, hasil panen meningkat'
+  },
+  {
+    id: '3',
+    nik: '3509146704880003',
+    nama: 'Bambang Sutrisno',
+    tempatLahir: 'Kediri',
+    tanggalLahir: '1988-04-27',
+    jenisKelamin: 'L',
+    alamat: 'Ds. Banyakan RT 03 RW 02',
+    desa: 'Banyakan',
+    kecamatan: 'Kediri',
+    kabupaten: 'Kediri',
+    provinsi: 'Jawa Timur',
+    kodePos: '64182',
+    noTelepon: '08345678901',
+    email: '',
+    pendidikan: 'SD',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 3.2,
+    kelompokTani: 'Sumber Rejeki',
+    statusAktif: true,
+    tanggalDaftar: '2019-08-10',
+    catatan: 'Ketua kelompok tani, memiliki pengalaman 15 tahun'
+  },
+  {
+    id: '4',
+    nik: '3510157805750004',
+    nama: 'Rini Wahyuni',
+    tempatLahir: 'Tulungagung',
+    tanggalLahir: '1975-05-18',
+    jenisKelamin: 'P',
+    alamat: 'Jl. Anggrek No. 8 RT 01 RW 03',
+    desa: 'Kedungwaru',
+    kecamatan: 'Kedungwaru',
+    kabupaten: 'Tulungagung',
+    provinsi: 'Jawa Timur',
+    kodePos: '66229',
+    noTelepon: '08456789012',
+    email: 'rini.wahyuni75@gmail.com',
+    pendidikan: 'SMA',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Cerai Mati',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 1.5,
+    kelompokTani: 'Maju Bersama',
+    statusAktif: true,
+    tanggalDaftar: '2022-05-12',
+    catatan: 'Inovator dalam teknik budidaya, sering menjadi narasumber'
+  },
+  {
+    id: '5',
+    nik: '3511168906790005',
+    nama: 'Ahmad Fauzi',
+    tempatLahir: 'Jember',
+    tanggalLahir: '1979-06-29',
+    jenisKelamin: 'L',
+    alamat: 'Jl. Kalimantan No. 23 RT 04 RW 02',
+    desa: 'Sumbersari',
+    kecamatan: 'Sumbersari',
+    kabupaten: 'Jember',
+    provinsi: 'Jawa Timur',
+    kodePos: '68121',
+    noTelepon: '08567890123',
+    email: 'ahmad.fauzi@yahoo.com',
+    pendidikan: 'D3',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 4.0,
+    kelompokTani: 'Subur Makmur',
+    statusAktif: true,
+    tanggalDaftar: '2018-11-05',
+    catatan: 'Memiliki lahan terluas, konsisten dalam program pemerintah'
+  },
+  {
+    id: '6',
+    nik: '3512179007830006',
+    nama: 'Dwi Kurniawan',
+    tempatLahir: 'Bondowoso',
+    tanggalLahir: '1983-07-30',
+    jenisKelamin: 'L',
+    alamat: 'Ds. Tamanan RT 02 RW 01',
+    desa: 'Tamanan',
+    kecamatan: 'Bondowoso',
+    kabupaten: 'Bondowoso',
+    provinsi: 'Jawa Timur',
+    kodePos: '68219',
+    noTelepon: '08678901234',
+    pendidikan: 'SMP',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 2.0,
+    kelompokTani: 'Karya Tani',
+    statusAktif: false,
+    tanggalDaftar: '2020-12-18',
+    catatan: 'Sedang tidak aktif karena pindah domisili'
+  },
+  {
+    id: '7',
+    nik: '3513180108910007',
+    nama: 'Sri Mulyani',
+    tempatLahir: 'Situbondo',
+    tanggalLahir: '1991-08-01',
+    jenisKelamin: 'P',
+    alamat: 'Jl. Pemuda No. 67 RT 01 RW 04',
+    desa: 'Panji',
+    kecamatan: 'Panji',
+    kabupaten: 'Situbondo',
+    provinsi: 'Jawa Timur',
+    kodePos: '68374',
+    noTelepon: '08789012345',
+    email: 'sri.mulyani91@gmail.com',
+    pendidikan: 'SMA',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Belum Kawin',
+    statusKepemilikanLahan: 'Sewa',
+    luasLahan: 1.2,
+    kelompokTani: 'Muda Tani',
+    statusAktif: true,
+    tanggalDaftar: '2023-02-14',
+    catatan: 'Petani muda dengan semangat tinggi untuk belajar'
+  },
+  {
+    id: '8',
+    nik: '3514191209870008',
+    nama: 'Haryanto',
+    tempatLahir: 'Probolinggo',
+    tanggalLahir: '1987-09-12',
+    jenisKelamin: 'L',
+    alamat: 'Ds. Kraksaan RT 03 RW 02',
+    desa: 'Kraksaan',
+    kecamatan: 'Kraksaan',
+    kabupaten: 'Probolinggo',
+    provinsi: 'Jawa Timur',
+    kodePos: '67282',
+    noTelepon: '08890123456',
+    email: 'haryanto87@yahoo.com',
+    pendidikan: 'SMA',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 2.8,
+    kelompokTani: 'Berkah Tani',
+    statusAktif: true,
+    tanggalDaftar: '2021-07-22',
+    catatan: 'Ahli dalam pengendalian hama dan penyakit tanaman'
+  },
+  {
+    id: '9',
+    nik: '3515201310940009',
+    nama: 'Ningsih Pratiwi',
+    tempatLahir: 'Pasuruan',
+    tanggalLahir: '1994-10-13',
+    jenisKelamin: 'P',
+    alamat: 'Jl. Diponegoro No. 34 RT 02 RW 01',
+    desa: 'Bugulkidul',
+    kecamatan: 'Bugulkidul',
+    kabupaten: 'Pasuruan',
+    provinsi: 'Jawa Timur',
+    kodePos: '67163',
+    noTelepon: '08901234567',
+    email: 'ningsih.pratiwi@gmail.com',
+    pendidikan: 'S1',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 1.7,
+    kelompokTani: 'Tani Muda',
+    statusAktif: true,
+    tanggalDaftar: '2023-09-08',
+    catatan: 'Sarjana pertanian, membawa inovasi teknologi modern'
+  },
+  {
+    id: '10',
+    nik: '3516211411760010',
+    nama: 'Joko Susilo',
+    tempatLahir: 'Lumajang',
+    tanggalLahir: '1976-11-14',
+    jenisKelamin: 'L',
+    alamat: 'Ds. Tempeh RT 01 RW 03',
+    desa: 'Tempeh',
+    kecamatan: 'Tempeh',
+    kabupaten: 'Lumajang',
+    provinsi: 'Jawa Timur',
+    kodePos: '67371',
+    noTelepon: '08012345678',
+    pendidikan: 'SMP',
+    pekerjaan: 'Petani Tembakau',
+    statusPerkawinan: 'Kawin',
+    statusKepemilikanLahan: 'Milik Sendiri',
+    luasLahan: 3.5,
+    kelompokTani: 'Tani Sejahtera',
+    statusAktif: true,
+    tanggalDaftar: '2017-04-25',
+    catatan: 'Veteran petani tembakau dengan hasil panen konsisten tinggi'
+  }
+];
+
+// API Response type untuk implementasi yang lebih realistis
+export interface PetaniApiResponse {
+  success: boolean;
+  message: string;
+  data: Petani[];
+  total?: number;
+  page?: number;
+  limit?: number;
+}
+
+export interface PetaniApiRequest {
+  id?: string;
+  data?: Partial<Petani>;
+  filters?: {
+    nama?: string;
+    nik?: string;
+    kelompokTani?: string;
+    statusAktif?: boolean;
+    kabupaten?: string;
+  };
+  pagination?: {
+    page: number;
+    limit: number;
+  };
+  sort?: {
+    field: string;
+    direction: 'asc' | 'desc';
+  };
+}

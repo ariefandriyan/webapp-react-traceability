@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* Ensure proper dark mode class application */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Force light theme styles with higher specificity */
+html.light,
+html.light body {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+/* Ensure dark theme works too */
+html.dark,
+html.dark body {
+  background-color: #111827 !important;
+  color: #f9fafb !important;
+}
+
+/* Light mode text colors - force proper visibility */
+html.light .text-gray-900 { color: #111827 !important; }
+html.light .text-gray-800 { color: #1f2937 !important; }
+html.light .text-gray-700 { color: #374151 !important; }
+html.light .text-gray-600 { color: #4b5563 !important; }
+html.light .text-gray-500 { color: #6b7280 !important; }
+html.light .text-gray-400 { color: #9ca3af !important; }
+html.light .text-gray-300 { color: #d1d5db !important; }
+html.light .text-white { color: #000000 !important; }
+
+/* Light mode background colors */
+html.light .bg-white { background-color: #ffffff !important; }
+html.light .bg-gray-50 { background-color: #f9fafb !important; }
+html.light .bg-gray-100 { background-color: #f3f4f6 !important; }
+html.light .bg-gray-200 { background-color: #e5e7eb !important; }
+html.light .bg-gray-300 { background-color: #d1d5db !important; }
+html.light .bg-gray-700 { background-color: #f3f4f6 !important; } /* Override dark backgrounds */
+html.light .bg-gray-800 { background-color: #ffffff !important; } /* Override dark backgrounds */
+html.light .bg-gray-900 { background-color: #f9fafb !important; } /* Override dark backgrounds */
+
+/* Light mode border colors */
+html.light .border-gray-200 { border-color: #e5e7eb !important; }
+html.light .border-gray-300 { border-color: #d1d5db !important; }
+html.light .border-gray-600 { border-color: #d1d5db !important; } /* Override dark borders */
+html.light .border-gray-700 { border-color: #e5e7eb !important; } /* Override dark borders */
+
+/* Light mode hover states */
+html.light .hover\:bg-gray-50:hover { background-color: #f9fafb !important; }
+html.light .hover\:bg-gray-100:hover { background-color: #f3f4f6 !important; }
+html.light .hover\:bg-gray-600:hover { background-color: #f3f4f6 !important; } /* Override dark hover */
+html.light .hover\:bg-gray-700:hover { background-color: #f9fafb !important; } /* Override dark hover */
+
+html.light .hover\:text-gray-300:hover { color: #6b7280 !important; } /* Override dark text hover */
+html.light .hover\:text-gray-600:hover { color: #4b5563 !important; }
+html.light .hover\:text-gray-700:hover { color: #374151 !important; }
+
+/* Light mode emerald/green colors */
+html.light .bg-emerald-50 { background-color: #ecfdf5 !important; }
+html.light .bg-emerald-100 { background-color: #d1fae5 !important; }
+html.light .text-emerald-600 { color: #059669 !important; }
+html.light .text-emerald-800 { color: #065f46 !important; }
+html.light .text-emerald-400 { color: #34d399 !important; }
+html.light .border-emerald-200 { border-color: #a7f3d0 !important; }
+html.light .border-emerald-700 { border-color: #a7f3d0 !important; } /* Override dark border */
+
+html.light .hover\:text-emerald-300:hover { color: #6ee7b7 !important; } /* Override dark hover */
+html.light .hover\:text-emerald-400:hover { color: #34d399 !important; } /* Override dark hover */
+html.light .hover\:text-emerald-500:hover { color: #10b981 !important; }
+
+/* Light mode blue colors */
+html.light .hover\:text-blue-400:hover { color: #60a5fa !important; } /* Override dark hover */
+html.light .hover\:text-blue-900:hover { color: #1e3a8a !important; }
+
+/* Light mode red colors */
+html.light .hover\:text-red-300:hover { color: #fca5a5 !important; } /* Override dark hover */
+html.light .hover\:text-red-400:hover { color: #f87171 !important; } /* Override dark hover */
+html.light .hover\:text-red-700:hover { color: #b91c1c !important; }
+
+/* Input and form elements */
+html.light input { 
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+  border-color: #d1d5db !important; 
+}
+
+html.light select { 
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+  border-color: #d1d5db !important; 
+}
+
+html.light textarea { 
+  background-color: #ffffff !important; 
+  color: #000000 !important; 
+  border-color: #d1d5db !important; 
+}
+
+/* Override any conflicting styles */
+html.light * {
+  --tw-bg-opacity: 1;
+}
+
+html.dark * {
+  --tw-bg-opacity: 1;
+}
+
+/* Custom smooth animations */
+@keyframes slide-in-right {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes progress-shine {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.progress-shine {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200px 100%;
+  animation: progress-shine 1.5s infinite;
+}

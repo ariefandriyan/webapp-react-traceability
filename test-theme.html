@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-300">
+    <div class="p-8">
+        <h1 class="text-2xl font-bold mb-4">Theme Test</h1>
+        <p class="mb-4">This text should change color based on theme.</p>
+        <button id="toggle" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">
+            Toggle Theme
+        </button>
+        <div class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
+            <p>This container should also change background based on theme.</p>
+        </div>
+    </div>
+
+    <script>
+        let isDark = false;
+        const toggle = document.getElementById('toggle');
+        const html = document.documentElement;
+
+        function applyTheme(dark) {
+            console.log('Applying theme:', dark ? 'dark' : 'light');
+            html.classList.remove('light', 'dark');
+            html.classList.add(dark ? 'dark' : 'light');
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+            console.log('HTML classes:', html.classList.toString());
+        }
+
+        toggle.addEventListener('click', () => {
+            isDark = !isDark;
+            applyTheme(isDark);
+        });
+
+        // Initialize
+        const savedTheme = localStorage.getItem('theme');
+        isDark = savedTheme === 'dark';
+        applyTheme(isDark);
+    </script>
+</body>
+</html>

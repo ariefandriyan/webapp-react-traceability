@@ -1,0 +1,447 @@
+import React, { useState, useEffect } from 'react';
+import { KelompokTani, KelompokTaniFilters } from '../../types/kelompokTani';
+import KelompokTaniTable from '../../components/kelompok-tani/KelompokTaniTable';
+import KelompokTaniForm from '../../components/kelompok-tani/KelompokTaniForm';
+import KelompokTaniDetailModal from '../../components/kelompok-tani/KelompokTaniDetailModal';
+
+// Sample data kelompok tani
+const sampleKelompokTaniData: KelompokTani[] = [
+  {
+    id: '1',
+    kodeKelompok: 'KT001',
+    namaKelompok: 'Tani Makmur Sejahtera',
+    ketuaKelompok: 'Budi Santoso',
+    waktuBentuk: '2020-03-15',
+    alamat: 'Jl. Raya Desa No. 45',
+    desa: 'Tanjungsari',
+    kecamatan: 'Sukorejo',
+    kabupaten: 'Kediri',
+    provinsi: 'Jawa Timur',
+    kodePos: '64293',
+    noTelepon: '08123456789',
+    email: 'tanimakmur@email.com',
+    jumlahAnggota: 25,
+    luasTotalLahan: 15.5,
+    komoditasUtama: 'Tembakau Virginia',
+    statusLegalitas: 'Terdaftar',
+    skKelompok: 'SK/001/2020',
+    tanggalSK: '2020-03-20',
+    pembina: 'Ir. Siti Nurlaila',
+    bankMitra: 'Bank BRI',
+    noRekeningKelompok: '1234567890',
+    statusAktif: true,
+    tanggalDaftar: '2020-03-15',
+    catatan: 'Kelompok tani aktif dengan produksi stabil'
+  },
+  {
+    id: '2',
+    kodeKelompok: 'KT002',
+    namaKelompok: 'Sumber Rezeki',
+    ketuaKelompok: 'Ahmad Fadil',
+    waktuBentuk: '2019-08-10',
+    alamat: 'Dusun Krajan RT 02 RW 01',
+    desa: 'Karangasem',
+    kecamatan: 'Pacet',
+    kabupaten: 'Malang',
+    provinsi: 'Jawa Timur',
+    kodePos: '65162',
+    noTelepon: '08234567890',
+    jumlahAnggota: 18,
+    luasTotalLahan: 12.3,
+    komoditasUtama: 'Tembakau Burley',
+    statusLegalitas: 'Terdaftar',
+    skKelompok: 'SK/002/2019',
+    tanggalSK: '2019-08-15',
+    pembina: 'Dr. Agr. Bambang Sutrisno',
+    bankMitra: 'Bank Mandiri',
+    noRekeningKelompok: '9876543210',
+    statusAktif: true,
+    tanggalDaftar: '2019-08-10'
+  },
+  {
+    id: '3',
+    kodeKelompok: 'KT003',
+    namaKelompok: 'Harapan Baru',
+    ketuaKelompok: 'Sugeng Riyanto',
+    waktuBentuk: '2021-01-20',
+    alamat: 'Jl. Pahlawan No. 12',
+    desa: 'Bendosari',
+    kecamatan: 'Kras',
+    kabupaten: 'Kediri',
+    provinsi: 'Jawa Timur',
+    kodePos: '64181',
+    noTelepon: '08345678901',
+    email: 'harapanbaru@gmail.com',
+    jumlahAnggota: 30,
+    luasTotalLahan: 22.8,
+    komoditasUtama: 'Tembakau Rajangan',
+    statusLegalitas: 'Dalam Proses',
+    pembina: 'Ir. Made Sutrisna, M.P.',
+    bankMitra: 'Bank BCA',
+    statusAktif: true,
+    tanggalDaftar: '2021-01-20',
+    catatan: 'Kelompok baru dengan potensi berkembang'
+  },
+  {
+    id: '4',
+    kodeKelompok: 'KT004',
+    namaKelompok: 'Maju Bersama',
+    ketuaKelompok: 'Dwi Cahyono',
+    waktuBentuk: '2018-11-05',
+    alamat: 'Dusun Sumber RT 03 RW 02',
+    desa: 'Wonorejo',
+    kecamatan: 'Lawang',
+    kabupaten: 'Malang',
+    provinsi: 'Jawa Timur',
+    kodePos: '65211',
+    noTelepon: '08456789012',
+    jumlahAnggota: 22,
+    luasTotalLahan: 18.7,
+    komoditasUtama: 'Tembakau Virginia',
+    statusLegalitas: 'Terdaftar',
+    skKelompok: 'SK/004/2018',
+    tanggalSK: '2018-11-10',
+    pembina: 'Ir. Wayan Sudarma',
+    bankMitra: 'Bank BNI',
+    noRekeningKelompok: '5647382910',
+    statusAktif: true,
+    tanggalDaftar: '2018-11-05'
+  },
+  {
+    id: '5',
+    kodeKelompok: 'KT005',
+    namaKelompok: 'Tani Jaya',
+    ketuaKelompok: 'Eko Prasetyo',
+    waktuBentuk: '2022-06-12',
+    alamat: 'Jl. Merdeka No. 88',
+    desa: 'Sidorejo',
+    kecamatan: 'Pare',
+    kabupaten: 'Kediri',
+    provinsi: 'Jawa Timur',
+    kodePos: '64213',
+    noTelepon: '08567890123',
+    email: 'tanijaya2022@email.com',
+    jumlahAnggota: 15,
+    luasTotalLahan: 9.5,
+    komoditasUtama: 'Tembakau Burley',
+    statusLegalitas: 'Belum Terdaftar',
+    pembina: 'Ir. Ni Made Sari, S.P.',
+    statusAktif: true,
+    tanggalDaftar: '2022-06-12',
+    catatan: 'Kelompok baru masih dalam proses legalisasi'
+  },
+  {
+    id: '6',
+    kodeKelompok: 'KT006',
+    namaKelompok: 'Subur Makmur',
+    ketuaKelompok: 'Tri Wahyudi',
+    waktuBentuk: '2020-09-08',
+    alamat: 'Dusun Tengah RT 01 RW 03',
+    desa: 'Candirenggo',
+    kecamatan: 'Singosari',
+    kabupaten: 'Malang',
+    provinsi: 'Jawa Timur',
+    kodePos: '65153',
+    noTelepon: '08678901234',
+    jumlahAnggota: 28,
+    luasTotalLahan: 20.2,
+    komoditasUtama: 'Tembakau Rajangan',
+    statusLegalitas: 'Terdaftar',
+    skKelompok: 'SK/006/2020',
+    tanggalSK: '2020-09-15',
+    pembina: 'Dr. Ir. Agus Setiawan, M.Si.',
+    bankMitra: 'Bank Jatim',
+    noRekeningKelompok: '7890123456',
+    statusAktif: true,
+    tanggalDaftar: '2020-09-08'
+  },
+  {
+    id: '7',
+    kodeKelompok: 'KT007',
+    namaKelompok: 'Berkah Tani',
+    ketuaKelompok: 'Wahyu Hidayat',
+    waktuBentuk: '2021-12-03',
+    alamat: 'Jl. Diponegoro No. 156',
+    desa: 'Grogol',
+    kecamatan: 'Kediri',
+    kabupaten: 'Kediri',
+    provinsi: 'Jawa Timur',
+    kodePos: '64122',
+    noTelepon: '08789012345',
+    email: 'berkahtani@yahoo.com',
+    jumlahAnggota: 20,
+    luasTotalLahan: 14.6,
+    komoditasUtama: 'Tembakau Virginia',
+    statusLegalitas: 'Dalam Proses',
+    pembina: 'Ir. Kadek Suari, M.P.',
+    bankMitra: 'Bank BTN',
+    statusAktif: false,
+    tanggalDaftar: '2021-12-03',
+    catatan: 'Kelompok sedang tidak aktif sementara'
+  },
+  {
+    id: '8',
+    kodeKelompok: 'KT008',
+    namaKelompok: 'Gotong Royong',
+    ketuaKelompok: 'Bambang Wijaya',
+    waktuBentuk: '2019-04-25',
+    alamat: 'Dusun Sawah RT 04 RW 01',
+    desa: 'Sumberejo',
+    kecamatan: 'Batu',
+    kabupaten: 'Malang',
+    provinsi: 'Jawa Timur',
+    kodePos: '65311',
+    noTelepon: '08890123456',
+    jumlahAnggota: 35,
+    luasTotalLahan: 28.4,
+    komoditasUtama: 'Tembakau Burley',
+    statusLegalitas: 'Terdaftar',
+    skKelompok: 'SK/008/2019',
+    tanggalSK: '2019-05-01',
+    pembina: 'Ir. Putu Suryawan, S.P.',
+    bankMitra: 'Bank BRI',
+    noRekeningKelompok: '2468135790',
+    statusAktif: true,
+    tanggalDaftar: '2019-04-25'
+  }
+];
+
+const KelompokTaniPage: React.FC = () => {
+  const [kelompokTaniData, setKelompokTaniData] = useState<KelompokTani[]>(sampleKelompokTaniData);
+  const [filteredData, setFilteredData] = useState<KelompokTani[]>(sampleKelompokTaniData);
+  const [filters, setFilters] = useState<KelompokTaniFilters>({});
+  const [showForm, setShowForm] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
+  const [selectedKelompok, setSelectedKelompok] = useState<KelompokTani | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Filter data berdasarkan kriteria
+  useEffect(() => {
+    let filtered = [...kelompokTaniData];
+
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      filtered = filtered.filter(kelompok =>
+        kelompok.namaKelompok.toLowerCase().includes(searchLower) ||
+        kelompok.kodeKelompok.toLowerCase().includes(searchLower) ||
+        kelompok.ketuaKelompok.toLowerCase().includes(searchLower) ||
+        kelompok.desa.toLowerCase().includes(searchLower) ||
+        kelompok.kecamatan.toLowerCase().includes(searchLower)
+      );
+    }
+
+    if (filters.statusLegalitas) {
+      filtered = filtered.filter(kelompok => kelompok.statusLegalitas === filters.statusLegalitas);
+    }
+
+    if (filters.statusAktif !== undefined) {
+      filtered = filtered.filter(kelompok => kelompok.statusAktif === filters.statusAktif);
+    }
+
+    if (filters.kecamatan) {
+      filtered = filtered.filter(kelompok => kelompok.kecamatan === filters.kecamatan);
+    }
+
+    if (filters.kabupaten) {
+      filtered = filtered.filter(kelompok => kelompok.kabupaten === filters.kabupaten);
+    }
+
+    if (filters.komoditasUtama) {
+      filtered = filtered.filter(kelompok => kelompok.komoditasUtama === filters.komoditasUtama);
+    }
+
+    setFilteredData(filtered);
+  }, [kelompokTaniData, filters]);
+
+  const handleAddKelompok = () => {
+    setSelectedKelompok(null);
+    setIsEditing(false);
+    setShowForm(true);
+  };
+
+  const handleEditKelompok = (kelompok: KelompokTani) => {
+    setSelectedKelompok(kelompok);
+    setIsEditing(true);
+    setShowForm(true);
+    setShowDetail(false);
+  };
+
+  const handleDeleteKelompok = (id: string) => {
+    if (window.confirm('Apakah Anda yakin ingin menghapus kelompok tani ini?')) {
+      setKelompokTaniData(prev => prev.filter(kelompok => kelompok.id !== id));
+    }
+  };
+
+  const handleViewDetail = (kelompok: KelompokTani) => {
+    setSelectedKelompok(kelompok);
+    setShowDetail(true);
+  };
+
+  const handleSaveKelompok = (kelompokData: Omit<KelompokTani, 'id' | 'tanggalDaftar'>) => {
+    if (isEditing && selectedKelompok) {
+      // Update existing
+      setKelompokTaniData(prev => 
+        prev.map(kelompok => 
+          kelompok.id === selectedKelompok.id 
+            ? { ...kelompokData, id: selectedKelompok.id, tanggalDaftar: selectedKelompok.tanggalDaftar }
+            : kelompok
+        )
+      );
+    } else {
+      // Add new
+      const newKelompok: KelompokTani = {
+        ...kelompokData,
+        id: Date.now().toString(),
+        tanggalDaftar: new Date().toISOString().split('T')[0]
+      };
+      setKelompokTaniData(prev => [...prev, newKelompok]);
+    }
+    setShowForm(false);
+    setSelectedKelompok(null);
+  };
+
+  const handleFiltersChange = (newFilters: KelompokTaniFilters) => {
+    setFilters(newFilters);
+  };
+
+  // Calculate statistics
+  const totalKelompok = kelompokTaniData.length;
+  const activeKelompok = kelompokTaniData.filter(k => k.statusAktif).length;
+  const terdaftarKelompok = kelompokTaniData.filter(k => k.statusLegalitas === 'Terdaftar').length;
+  const totalAnggota = kelompokTaniData.reduce((sum, k) => sum + k.jumlahAnggota, 0);
+  const totalLahan = kelompokTaniData.reduce((sum, k) => sum + k.luasTotalLahan, 0);
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Master Data Kelompok Tani</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Kelola data kelompok tani dan informasi organisasi petani
+          </p>
+        </div>
+        <button
+          onClick={handleAddKelompok}
+          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          <span>Tambah Kelompok Tani Baru</span>
+        </button>
+      </div>
+
+      {/* Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Kelompok</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalKelompok}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Kelompok Aktif</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{activeKelompok}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Terdaftar Legal</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{terdaftarKelompok}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Anggota</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalAnggota}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Lahan</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalLahan.toFixed(1)} Ha</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Data Table */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+        <KelompokTaniTable
+          data={filteredData}
+          filters={filters}
+          onFiltersChange={handleFiltersChange}
+          onEdit={handleEditKelompok}
+          onDelete={handleDeleteKelompok}
+          onViewDetail={handleViewDetail}
+        />
+      </div>
+
+      {/* Form Modal */}
+      {showForm && (
+        <KelompokTaniForm
+          kelompok={selectedKelompok}
+          isEditing={isEditing}
+          onSave={handleSaveKelompok}
+          onCancel={() => {
+            setShowForm(false);
+            setSelectedKelompok(null);
+          }}
+        />
+      )}
+
+      {/* Detail Modal */}
+      {showDetail && selectedKelompok && (
+        <KelompokTaniDetailModal
+          kelompok={selectedKelompok}
+          onClose={() => {
+            setShowDetail(false);
+            setSelectedKelompok(null);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+export default KelompokTaniPage;
