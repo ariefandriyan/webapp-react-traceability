@@ -6,6 +6,7 @@ import VarietasPage from '../../pages/master-data/VarietasPage';
 import LahanPetaPage from '../../pages/LahanPetaPage';
 import FaseTanamPage from '../../pages/FaseTanamPage';
 import AksesibilitasJalanPage from '../../pages/AksesibilitasJalanPage';
+import PestisidaContent from '../pestisida/PestisidaContent';
 
 interface ContentRendererProps {
   activeMenuItem: string;
@@ -36,12 +37,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
         return <AksesibilitasJalanPage />;
       
       case 'pestisida':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Pestisida</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman pestisida akan segera tersedia</p>
-          </div>
-        );
+        return <PestisidaContent />;
       
       case 'hama-penyakit':
         return (
