@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Web Application
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tobacco-traceability-web
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    networks:
+      - tobacco-network
+    environment:
+      - NODE_ENV=production
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tobacco-web.rule=Host(`localhost`)"
+      - "traefik.http.services.tobacco-web.loadbalancer.server.port=80"
+
+  # Database (PostgreSQL) - Optional, uncomment jika diperlukan
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: tobacco-traceability-db
+  #   environment:
+  #     POSTGRES_DB: tobacco_traceability
+  #     POSTGRES_USER: tobacco_user
+  #     POSTGRES_PASSWORD: tobacco_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  #   ports:
+  #     - "5432:5432"
+  #   restart: unless-stopped
+  #   networks:
+  #     - tobacco-network
+
+  # Redis (Cache) - Optional, uncomment jika diperlukan
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: tobacco-traceability-redis
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+  #   networks:
+  #     - tobacco-network
+  #   command: redis-server --appendonly yes
+  #   volumes:
+  #     - redis_data:/data
+
+networks:
+  tobacco-network:
+    driver: bridge
+
+# volumes:
+#   postgres_data:
+#   redis_data:

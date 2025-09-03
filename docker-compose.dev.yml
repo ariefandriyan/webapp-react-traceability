@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Development Web Application dengan Hot Reload
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: tobacco-traceability-web-dev
+    ports:
+      - "5173:5173"  # Vite dev server port
+    restart: unless-stopped
+    networks:
+      - tobacco-dev-network
+    environment:
+      - NODE_ENV=development
+    volumes:
+      # Mount source code untuk hot reload
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./index.html:/app/index.html
+      - ./vite.config.ts:/app/vite.config.ts
+      - ./tailwind.config.ts:/app/tailwind.config.ts
+      - ./tsconfig.json:/app/tsconfig.json
+      # Exclude node_modules dari mount
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+
+networks:
+  tobacco-dev-network:
+    driver: bridge
