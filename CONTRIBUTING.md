@@ -1,51 +1,61 @@
 # 🤝 Contributing to Tobacco Traceability System
 
-Thank you for your interest in contributing to the Tobacco Traceability System! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to the **Tobacco Traceability System**! This document provides comprehensive guidelines and information for contributors who want to help improve this agricultural technology platform.
 
 ## 📋 Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Workflow](#development-workflow)
-- [Coding Standards](#coding-standards)
-- [Pull Request Process](#pull-request-process)
-- [Issue Reporting](#issue-reporting)
-- [Feature Requests](#feature-requests)
+- [🌟 Code of Conduct](#-code-of-conduct)
+- [🚀 Getting Started](#-getting-started)
+- [🔄 Development Workflow](#-development-workflow)
+- [📝 Coding Standards](#-coding-standards)
+- [🔍 Pull Request Process](#-pull-request-process)
+- [🐛 Issue Reporting](#-issue-reporting)
+- [💡 Feature Requests](#-feature-requests)
+- [🧪 Testing Guidelines](#-testing-guidelines)
+- [📚 Documentation](#-documentation)
+- [🎨 UI/UX Guidelines](#-uiux-guidelines)
 
-## 📜 Code of Conduct
+## 🌟 Code of Conduct
 
 By participating in this project, you agree to abide by our Code of Conduct:
 
-- **Be respectful**: Treat everyone with respect and kindness
-- **Be inclusive**: Welcome newcomers and help them succeed
-- **Be collaborative**: Work together and share knowledge
-- **Be constructive**: Provide helpful feedback and suggestions
+- **🤝 Be respectful**: Treat everyone with respect and kindness
+- **🌈 Be inclusive**: Welcome newcomers dan help them succeed
+- **👥 Be collaborative**: Work together dan share knowledge
+- **🏗️ Be constructive**: Provide helpful feedback dan suggestions
+- **🌱 Focus on agriculture**: Remember this is untuk agricultural community benefit
+- **📚 Share knowledge**: Help educate others about tobacco farming practices
 
 ## 🚀 Getting Started
 
-### Prerequisites
+### 📋 Prerequisites
 
-- Node.js 18.0+
-- npm or yarn
-- Git
-- Basic knowledge of React, TypeScript, and modern web development
+- **Node.js 18.0+** atau 20.0+ (Recommended)
+- **npm 9.0+** atau **yarn 1.22+**
+- **Git** untuk version control
+- **Basic knowledge**:
+  - React 18+ dan TypeScript
+  - Modern web development practices
+  - Agricultural domain knowledge (helpful but not required)
+  - Docker (untuk containerized development)
 
-### Local Development Setup
+### 🛠️ Local Development Setup
 
-1. **Fork the repository**
+1. **🍴 Fork the repository**
    ```bash
-   # Click the "Fork" button on GitHub
+   # Click "Fork" button di GitHub repository page
+   # https://github.com/ub-tobacco-traceability/web-app
    ```
 
-2. **Clone your fork**
+2. **📥 Clone your fork**
    ```bash
    git clone https://github.com/your-username/tobacco-traceability.git
    cd tobacco-traceability/web-app
    ```
 
-3. **Add upstream remote**
+3. **🔗 Add upstream remote**
    ```bash
-   git remote add upstream https://github.com/original-repo/tobacco-traceability.git
+   git remote add upstream https://github.com/ub-tobacco-traceability/web-app.git
    ```
 
 4. **Install dependencies**
