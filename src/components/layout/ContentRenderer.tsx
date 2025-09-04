@@ -8,6 +8,7 @@ import FaseTanamPage from '../../pages/FaseTanamPage';
 import AksesibilitasJalanPage from '../../pages/AksesibilitasJalanPage';
 import PestisidaContent from '../pestisida/PestisidaContent';
 import PendaftaranPetaniContent from '../approval/PendaftaranPetaniContent';
+import AktivitasTanamApprovalContent from '../activities/AktivitasTanamApprovalContent';
 
 interface ContentRendererProps {
   activeMenuItem: string;
@@ -52,12 +53,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
         return <PendaftaranPetaniContent />;
       
       case 'aktivitas-tanam-approval':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Approval Aktivitas Tanam</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman approval aktivitas tanam akan segera tersedia</p>
-          </div>
-        );
+        return <AktivitasTanamApprovalContent />;
       
       case 'update-fase-tanam':
         return (
