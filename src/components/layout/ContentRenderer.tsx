@@ -13,6 +13,10 @@ import ManajemenTanamContent from '../activities/ManajemenTanamContent';
 import UpdateFaseTanamContent from '../activities/UpdateFaseTanamContent';
 import UpdatePestisidaContent from '../activities/UpdatePestisidaContent';
 import KalenderTanamContent from '../activities/KalenderTanamContent';
+import LaporanContent from '../reports/LaporanContent';
+import PenggunaContent from '../settings/PenggunaContent';
+import HakAksesContent from '../settings/HakAksesContent';
+import AplikasiContent from '../settings/AplikasiContent';
 
 interface ContentRendererProps {
   activeMenuItem: string;
@@ -82,36 +86,16 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
         return <KalenderTanamContent />;
       
       case 'laporan':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Laporan</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman laporan akan segera tersedia</p>
-          </div>
-        );
+        return <LaporanContent />;
       
       case 'pengguna':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Pengaturan Pengguna</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman pengaturan pengguna akan segera tersedia</p>
-          </div>
-        );
+        return <PenggunaContent />;
       
       case 'hak-akses':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Pengaturan Hak Akses</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman pengaturan hak akses akan segera tersedia</p>
-          </div>
-        );
+        return <HakAksesContent />;
       
       case 'aplikasi':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Pengaturan Aplikasi</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman pengaturan aplikasi akan segera tersedia</p>
-          </div>
-        );
+        return <AplikasiContent />;
       
       default:
         return <DashboardContent />;
