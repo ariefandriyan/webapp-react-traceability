@@ -9,6 +9,7 @@ import AksesibilitasJalanPage from '../../pages/AksesibilitasJalanPage';
 import PestisidaContent from '../pestisida/PestisidaContent';
 import PendaftaranPetaniContent from '../approval/PendaftaranPetaniContent';
 import AktivitasTanamApprovalContent from '../activities/AktivitasTanamApprovalContent';
+import ManajemenTanamContent from '../activities/ManajemenTanamContent';
 
 interface ContentRendererProps {
   activeMenuItem: string;
@@ -54,6 +55,11 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
       
       case 'aktivitas-tanam-approval':
         return <AktivitasTanamApprovalContent />;
+
+      case 'manajemen-tanam':
+      case 'daftar-tanam':
+      case 'tambah-tanam-baru':
+        return <ManajemenTanamContent />;
       
       case 'update-fase-tanam':
         return (
