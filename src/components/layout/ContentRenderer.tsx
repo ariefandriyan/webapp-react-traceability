@@ -10,6 +10,7 @@ import PestisidaContent from '../pestisida/PestisidaContent';
 import PendaftaranPetaniContent from '../approval/PendaftaranPetaniContent';
 import AktivitasTanamApprovalContent from '../activities/AktivitasTanamApprovalContent';
 import ManajemenTanamContent from '../activities/ManajemenTanamContent';
+import UpdateFaseTanamContent from '../activities/UpdateFaseTanamContent';
 
 interface ContentRendererProps {
   activeMenuItem: string;
@@ -62,12 +63,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
         return <ManajemenTanamContent />;
       
       case 'update-fase-tanam':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Update Fase Tanam</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman update fase tanam akan segera tersedia</p>
-          </div>
-        );
+        return <UpdateFaseTanamContent />;
       
       case 'update-pestisida':
         return (
