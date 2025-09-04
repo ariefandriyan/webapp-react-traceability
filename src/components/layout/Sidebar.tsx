@@ -117,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           ),
           path: '/master-data/pestisida' 
         },
-        { 
+        /* { 
           id: 'hama-penyakit', 
           label: 'Hama & Penyakit', 
           icon: (
@@ -126,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             </svg>
           ),
           path: '/master-data/hama-penyakit' 
-        },
+        }, */
       ],
     },
     // Menu separator (handled in render)

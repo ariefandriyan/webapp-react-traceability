@@ -7,6 +7,7 @@ import LahanPetaPage from '../../pages/LahanPetaPage';
 import FaseTanamPage from '../../pages/FaseTanamPage';
 import AksesibilitasJalanPage from '../../pages/AksesibilitasJalanPage';
 import PestisidaContent from '../pestisida/PestisidaContent';
+import PendaftaranPetaniContent from '../approval/PendaftaranPetaniContent';
 
 interface ContentRendererProps {
   activeMenuItem: string;
@@ -48,12 +49,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
         );
       
       case 'pendaftaran-petani':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Approval Pendaftaran Petani</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman approval pendaftaran petani akan segera tersedia</p>
-          </div>
-        );
+        return <PendaftaranPetaniContent />;
       
       case 'aktivitas-tanam-approval':
         return (
