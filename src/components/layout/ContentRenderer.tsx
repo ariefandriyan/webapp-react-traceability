@@ -11,6 +11,8 @@ import PendaftaranPetaniContent from '../approval/PendaftaranPetaniContent';
 import AktivitasTanamApprovalContent from '../activities/AktivitasTanamApprovalContent';
 import ManajemenTanamContent from '../activities/ManajemenTanamContent';
 import UpdateFaseTanamContent from '../activities/UpdateFaseTanamContent';
+import UpdatePestisidaContent from '../activities/UpdatePestisidaContent';
+import KalenderTanamContent from '../activities/KalenderTanamContent';
 
 interface ContentRendererProps {
   activeMenuItem: string;
@@ -66,12 +68,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
         return <UpdateFaseTanamContent />;
       
       case 'update-pestisida':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Update Penggunaan Pestisida</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman update pestisida akan segera tersedia</p>
-          </div>
-        );
+        return <UpdatePestisidaContent />;
       
       case 'update-penyakit':
         return (
@@ -82,12 +79,7 @@ const ContentRenderer: React.FC<ContentRendererProps> = ({ activeMenuItem }) => 
         );
       
       case 'kalender-tanam':
-        return (
-          <div className="text-center py-16">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Kalender Tanam</h2>
-            <p className="text-gray-600 dark:text-gray-400">Halaman kalender tanam akan segera tersedia</p>
-          </div>
-        );
+        return <KalenderTanamContent />;
       
       case 'laporan':
         return (

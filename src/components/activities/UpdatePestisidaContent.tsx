@@ -33,16 +33,6 @@ interface Varietas {
   status: 'active' | 'inactive';
 }
 
-interface FaseTanam {
-  id: string;
-  nama: string;
-  urutan: number;
-  deskripsi: string;
-  minUsia: number; // hari
-  maxUsia: number; // hari
-  status: 'active' | 'inactive';
-}
-
 interface TanamRecord {
   id: string;
   petaniId: string;
@@ -66,21 +56,41 @@ interface TanamRecord {
   updatedAt: string;
 }
 
-interface FaseTanamRecord {
+interface Pestisida {
   id: string;
-  tanamId: string;
-  faseTanamId: string;
-  tanggalUpdate: string;
-  catatanFase: string;
-  kondisiTanaman: 'baik' | 'cukup' | 'buruk';
-  updateBy: string;
-  status: 'draft' | 'pending_approval' | 'approved' | 'rejected';
-  approvalBy?: string;
-  approvalDate?: string;
-  approvalNote?: string;
+  nama: string;
+  merek: string;
+  jenis: 'Insektisida' | 'Fungisida' | 'Herbisida' | 'Bakterisida';
+  bahanAktif: string;
+  deskripsi: string;
+  status: 'active' | 'inactive';
 }
 
-const UpdateFaseTanamContent: React.FC = () => {
+interface JenisHama {
+  id: string;
+  nama: string;
+  kategori: 'Serangga' | 'Jamur' | 'Bakteri' | 'Gulma' | 'Virus';
+  deskripsi: string;
+  status: 'active' | 'inactive';
+}
+
+interface PestisidaRecord {
+  id: string;
+  tanamId: string;
+  pestisidaId: string;
+  tanggalAplikasi: string;
+  usiaSeratAplikasi: number; // usia tanaman dalam hari
+  dosis: number;
+  satuanDosis: 'ml/liter' | 'gram/liter' | 'liter/ha';
+  jenisHamaId: string;
+  metodeAplikasi: 'Semprot' | 'Siram' | 'Tabur' | 'Fumigasi';
+  kondisiCuaca: 'Cerah' | 'Berawan' | 'Hujan Ringan';
+  catatanAplikasi: string;
+  updateBy: string;
+  createdAt: string;
+}
+
+const UpdatePestisidaContent: React.FC = () => {
   // State untuk modal
   const [showModal, setShowModal] = useState(false);
   const [selectedTanam, setSelectedTanam] = useState<TanamRecord | null>(null);
@@ -90,11 +100,16 @@ const UpdateFaseTanamContent: React.FC = () => {
   const [filterStatus, setFilterStatus] = useState<'all' | 'active' | 'completed'>('active');
   const [filterPetani, setFilterPetani] = useState<string>('all');
 
-  // State untuk form input fase baru
-  const [newFaseForm, setNewFaseForm] = useState({
-    faseTanamId: '',
-    catatanFase: '',
-    kondisiTanaman: 'baik' as 'baik' | 'cukup' | 'buruk'
+  // State untuk form input pestisida baru
+  const [newPestisidaForm, setNewPestisidaForm] = useState({
+    pestisidaId: '',
+    tanggalAplikasi: new Date().toISOString().split('T')[0],
+    dosis: '',
+    satuanDosis: 'ml/liter' as 'ml/liter' | 'gram/liter' | 'liter/ha',
+    jenisHamaId: '',
+    metodeAplikasi: 'Semprot' as 'Semprot' | 'Siram' | 'Tabur' | 'Fumigasi',
+    kondisiCuaca: 'Cerah' as 'Cerah' | 'Berawan' | 'Hujan Ringan',
+    catatanAplikasi: ''
   });
 
   // State untuk loading dan toast
@@ -197,59 +212,95 @@ const UpdateFaseTanamContent: React.FC = () => {
     }
   ];
 
-  const mockFaseTanam: FaseTanam[] = [
+  const mockPestisida: Pestisida[] = [
     {
-      id: 'FASE001',
-      nama: 'Persemaian',
-      urutan: 1,
-      deskripsi: 'Fase pembibitan dan persemaian benih tembakau',
-      minUsia: 0,
-      maxUsia: 14,
+      id: 'PEST001',
+      nama: 'Cypermethrin 25 EC',
+      merek: 'Cyperguard',
+      jenis: 'Insektisida',
+      bahanAktif: 'Cypermethrin 25%',
+      deskripsi: 'Insektisida sistemik untuk mengendalikan hama penggerek',
       status: 'active'
     },
     {
-      id: 'FASE002',
-      nama: 'Transplanting',
-      urutan: 2,
-      deskripsi: 'Fase pemindahan bibit ke lahan tanam',
-      minUsia: 15,
-      maxUsia: 21,
+      id: 'PEST002',
+      nama: 'Mancozeb 80 WP',
+      merek: 'Fungitox',
+      jenis: 'Fungisida',
+      bahanAktif: 'Mancozeb 80%',
+      deskripsi: 'Fungisida kontak untuk mencegah penyakit jamur',
       status: 'active'
     },
     {
-      id: 'FASE003',
-      nama: 'Vegetatif Awal',
-      urutan: 3,
-      deskripsi: 'Fase pertumbuhan vegetatif awal setelah transplanting',
-      minUsia: 22,
-      maxUsia: 35,
+      id: 'PEST003',
+      nama: 'Glyphosate 480 SL',
+      merek: 'Roundup',
+      jenis: 'Herbisida',
+      bahanAktif: 'Glyphosate 480 g/l',
+      deskripsi: 'Herbisida sistemik untuk mengendalikan gulma',
       status: 'active'
     },
     {
-      id: 'FASE004',
-      nama: 'Vegetatif Lanjut',
-      urutan: 4,
-      deskripsi: 'Fase pertumbuhan vegetatif lanjut dengan pembentukan daun',
-      minUsia: 36,
-      maxUsia: 50,
+      id: 'PEST004',
+      nama: 'Imidacloprid 200 SL',
+      merek: 'Confidor',
+      jenis: 'Insektisida',
+      bahanAktif: 'Imidacloprid 200 g/l',
+      deskripsi: 'Insektisida sistemik untuk kutu daun dan thrips',
       status: 'active'
     },
     {
-      id: 'FASE005',
-      nama: 'Pembungaan',
-      urutan: 5,
-      deskripsi: 'Fase munculnya bunga dan topping',
-      minUsia: 51,
-      maxUsia: 65,
+      id: 'PEST005',
+      nama: 'Carbendazim 50 WP',
+      merek: 'Benlate',
+      jenis: 'Fungisida',
+      bahanAktif: 'Carbendazim 50%',
+      deskripsi: 'Fungisida sistemik untuk penyakit layu dan busuk',
+      status: 'active'
+    }
+  ];
+
+  const mockJenisHama: JenisHama[] = [
+    {
+      id: 'HAMA001',
+      nama: 'Ulat Grayak',
+      kategori: 'Serangga',
+      deskripsi: 'Hama yang menyerang daun tembakau muda',
       status: 'active'
     },
     {
-      id: 'FASE006',
-      nama: 'Pematangan',
-      urutan: 6,
-      deskripsi: 'Fase pematangan daun untuk persiapan panen',
-      minUsia: 66,
-      maxUsia: 90,
+      id: 'HAMA002',
+      nama: 'Kutu Daun',
+      kategori: 'Serangga',
+      deskripsi: 'Serangga kecil yang menghisap cairan daun',
+      status: 'active'
+    },
+    {
+      id: 'HAMA003',
+      nama: 'Thrips',
+      kategori: 'Serangga',
+      deskripsi: 'Serangga kecil yang merusak permukaan daun',
+      status: 'active'
+    },
+    {
+      id: 'HAMA004',
+      nama: 'Penyakit Layu Fusarium',
+      kategori: 'Jamur',
+      deskripsi: 'Penyakit jamur yang menyebabkan layu pada tanaman',
+      status: 'active'
+    },
+    {
+      id: 'HAMA005',
+      nama: 'Bercak Daun',
+      kategori: 'Jamur',
+      deskripsi: 'Penyakit yang menyebabkan bercak pada daun',
+      status: 'active'
+    },
+    {
+      id: 'HAMA006',
+      nama: 'Gulma Lebar',
+      kategori: 'Gulma',
+      deskripsi: 'Gulma berdaun lebar yang mengganggu pertumbuhan',
       status: 'active'
     }
   ];
@@ -308,72 +359,52 @@ const UpdateFaseTanamContent: React.FC = () => {
     }
   ];
 
-  // Data histori fase tanam
-  const [faseTanamRecords, setFaseTanamRecords] = useState<FaseTanamRecord[]>([
+  // Data riwayat penggunaan pestisida
+  const [pestisidaRecords, setPestisidaRecords] = useState<PestisidaRecord[]>([
     {
-      id: 'FTR001',
+      id: 'PESTAPP001',
       tanamId: 'TNM001',
-      faseTanamId: 'FASE001',
-      tanggalUpdate: '2025-07-15',
-      catatanFase: 'Persemaian berhasil, benih berkecambah dengan baik',
-      kondisiTanaman: 'baik',
+      pestisidaId: 'PEST001',
+      tanggalAplikasi: '2025-08-05',
+      usiaSeratAplikasi: 21,
+      dosis: 2.5,
+      satuanDosis: 'ml/liter',
+      jenisHamaId: 'HAMA001',
+      metodeAplikasi: 'Semprot',
+      kondisiCuaca: 'Cerah',
+      catatanAplikasi: 'Aplikasi pagi hari, kondisi tanaman sehat',
       updateBy: 'operator1',
-      status: 'approved',
-      approvalBy: 'admin1',
-      approvalDate: '2025-07-16',
-      approvalNote: 'Kondisi persemaian sangat baik'
+      createdAt: '2025-08-05T08:00:00Z'
     },
     {
-      id: 'FTR002',
+      id: 'PESTAPP002',
       tanamId: 'TNM001',
-      faseTanamId: 'FASE002',
-      tanggalUpdate: '2025-07-30',
-      catatanFase: 'Transplanting selesai, bibit beradaptasi dengan baik',
-      kondisiTanaman: 'baik',
+      pestisidaId: 'PEST002',
+      tanggalAplikasi: '2025-08-20',
+      usiaSeratAplikasi: 36,
+      dosis: 3.0,
+      satuanDosis: 'gram/liter',
+      jenisHamaId: 'HAMA005',
+      metodeAplikasi: 'Semprot',
+      kondisiCuaca: 'Berawan',
+      catatanAplikasi: 'Pencegahan penyakit jamur, aplikasi sore hari',
       updateBy: 'operator1',
-      status: 'approved',
-      approvalBy: 'admin1',
-      approvalDate: '2025-07-31',
-      approvalNote: 'Proses transplanting berhasil'
+      createdAt: '2025-08-20T16:00:00Z'
     },
     {
-      id: 'FTR003',
-      tanamId: 'TNM001',
-      faseTanamId: 'FASE003',
-      tanggalUpdate: '2025-08-20',
-      catatanFase: 'Pertumbuhan vegetatif awal baik, daun mulai terbentuk',
-      kondisiTanaman: 'baik',
-      updateBy: 'operator1',
-      status: 'approved',
-      approvalBy: 'admin1',
-      approvalDate: '2025-08-21',
-      approvalNote: 'Pertumbuhan sesuai target'
-    },
-    {
-      id: 'FTR004',
+      id: 'PESTAPP003',
       tanamId: 'TNM002',
-      faseTanamId: 'FASE001',
-      tanggalUpdate: '2025-08-01',
-      catatanFase: 'Persemaian dimulai, kondisi benih baik',
-      kondisiTanaman: 'baik',
+      pestisidaId: 'PEST004',
+      tanggalAplikasi: '2025-08-25',
+      usiaSeratAplikasi: 24,
+      dosis: 1.5,
+      satuanDosis: 'ml/liter',
+      jenisHamaId: 'HAMA002',
+      metodeAplikasi: 'Semprot',
+      kondisiCuaca: 'Cerah',
+      catatanAplikasi: 'Pengendalian kutu daun yang mulai muncul',
       updateBy: 'operator2',
-      status: 'approved',
-      approvalBy: 'admin1',
-      approvalDate: '2025-08-02',
-      approvalNote: 'Persemaian dalam kondisi optimal'
-    },
-    {
-      id: 'FTR005',
-      tanamId: 'TNM002',
-      faseTanamId: 'FASE002',
-      tanggalUpdate: '2025-08-16',
-      catatanFase: 'Transplanting berhasil dilakukan',
-      kondisiTanaman: 'baik',
-      updateBy: 'operator2',
-      status: 'pending_approval',
-      approvalBy: undefined,
-      approvalDate: undefined,
-      approvalNote: undefined
+      createdAt: '2025-08-25T09:00:00Z'
     }
   ]);
 
@@ -381,7 +412,8 @@ const UpdateFaseTanamContent: React.FC = () => {
   const getPetaniById = (id: string) => mockPetani.find(p => p.id === id);
   const getLahanById = (id: string) => mockLahan.find(l => l.id === id);
   const getVarietasById = (id: string) => mockVarietas.find(v => v.id === id);
-  const getFaseTanamById = (id: string) => mockFaseTanam.find(f => f.id === id);
+  const getPestisidaById = (id: string) => mockPestisida.find(p => p.id === id);
+  const getJenisHamaById = (id: string) => mockJenisHama.find(h => h.id === id);
 
   // Calculate age of plant in days
   const calculatePlantAge = (tanggalTanam: string): number => {
@@ -392,42 +424,23 @@ const UpdateFaseTanamContent: React.FC = () => {
     return diffDays;
   };
 
-  // Get latest fase for a tanam record
-  const getLatestFase = (tanamId: string): FaseTanamRecord | null => {
-    const faseRecords = faseTanamRecords.filter(f => f.tanamId === tanamId && f.status === 'approved');
-    if (faseRecords.length === 0) return null;
-    
-    return faseRecords.reduce((latest, current) => {
-      const latestFase = getFaseTanamById(latest.faseTanamId);
-      const currentFase = getFaseTanamById(current.faseTanamId);
-      
-      if (!latestFase || !currentFase) return latest;
-      
-      return currentFase.urutan > latestFase.urutan ? current : latest;
-    });
+  // Calculate plant age at application date
+  const calculatePlantAgeAtApplication = (tanggalTanam: string, tanggalAplikasi: string): number => {
+    const plantDate = new Date(tanggalTanam);
+    const appDate = new Date(tanggalAplikasi);
+    const diffTime = Math.abs(appDate.getTime() - plantDate.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
 
-  // Get next recommended fase
-  const getNextRecommendedFase = (tanamId: string, plantAge: number): FaseTanam | null => {
-    const latestFase = getLatestFase(tanamId);
+  // Get latest pesticide application
+  const getLatestPestisidaApplication = (tanamId: string): PestisidaRecord | null => {
+    const applications = pestisidaRecords.filter(p => p.tanamId === tanamId);
+    if (applications.length === 0) return null;
     
-    if (!latestFase) {
-      // Jika belum ada fase, return fase pertama yang sesuai usia
-      return mockFaseTanam.find(f => plantAge >= f.minUsia && plantAge <= f.maxUsia) || mockFaseTanam[0];
-    }
-    
-    const currentFase = getFaseTanamById(latestFase.faseTanamId);
-    if (!currentFase) return null;
-    
-    // Find next fase in sequence
-    const nextFase = mockFaseTanam.find(f => f.urutan === currentFase.urutan + 1);
-    
-    // Check if plant age is appropriate for next fase
-    if (nextFase && plantAge >= nextFase.minUsia) {
-      return nextFase;
-    }
-    
-    return null;
+    return applications.reduce((latest, current) => {
+      return new Date(current.tanggalAplikasi) > new Date(latest.tanggalAplikasi) ? current : latest;
+    });
   };
 
   // Filter data
@@ -464,26 +477,36 @@ const UpdateFaseTanamContent: React.FC = () => {
   const handleOpenModal = (tanam: TanamRecord) => {
     setSelectedTanam(tanam);
     setShowModal(true);
-    setNewFaseForm({
-      faseTanamId: '',
-      catatanFase: '',
-      kondisiTanaman: 'baik'
+    setNewPestisidaForm({
+      pestisidaId: '',
+      tanggalAplikasi: new Date().toISOString().split('T')[0],
+      dosis: '',
+      satuanDosis: 'ml/liter',
+      jenisHamaId: '',
+      metodeAplikasi: 'Semprot',
+      kondisiCuaca: 'Cerah',
+      catatanAplikasi: ''
     });
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedTanam(null);
-    setNewFaseForm({
-      faseTanamId: '',
-      catatanFase: '',
-      kondisiTanaman: 'baik'
+    setNewPestisidaForm({
+      pestisidaId: '',
+      tanggalAplikasi: new Date().toISOString().split('T')[0],
+      dosis: '',
+      satuanDosis: 'ml/liter',
+      jenisHamaId: '',
+      metodeAplikasi: 'Semprot',
+      kondisiCuaca: 'Cerah',
+      catatanAplikasi: ''
     });
   };
 
-  // Handle submit new fase
-  const handleSubmitFase = async () => {
-    if (!selectedTanam || !newFaseForm.faseTanamId || !newFaseForm.catatanFase.trim()) {
+  // Handle submit new pestisida application
+  const handleSubmitPestisida = async () => {
+    if (!selectedTanam || !newPestisidaForm.pestisidaId || !newPestisidaForm.dosis || !newPestisidaForm.jenisHamaId || !newPestisidaForm.catatanAplikasi.trim()) {
       showToast('Mohon lengkapi semua field yang required', 'error');
       return;
     }
@@ -493,19 +516,26 @@ const UpdateFaseTanamContent: React.FC = () => {
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      const newFaseRecord: FaseTanamRecord = {
-        id: `FTR${Date.now()}`,
+      const usiaAplikasi = calculatePlantAgeAtApplication(selectedTanam.tanggalTanam, newPestisidaForm.tanggalAplikasi);
+
+      const newPestisidaRecord: PestisidaRecord = {
+        id: `PESTAPP${Date.now()}`,
         tanamId: selectedTanam.id,
-        faseTanamId: newFaseForm.faseTanamId,
-        tanggalUpdate: new Date().toISOString().split('T')[0],
-        catatanFase: newFaseForm.catatanFase,
-        kondisiTanaman: newFaseForm.kondisiTanaman,
+        pestisidaId: newPestisidaForm.pestisidaId,
+        tanggalAplikasi: newPestisidaForm.tanggalAplikasi,
+        usiaSeratAplikasi: usiaAplikasi,
+        dosis: parseFloat(newPestisidaForm.dosis),
+        satuanDosis: newPestisidaForm.satuanDosis,
+        jenisHamaId: newPestisidaForm.jenisHamaId,
+        metodeAplikasi: newPestisidaForm.metodeAplikasi,
+        kondisiCuaca: newPestisidaForm.kondisiCuaca,
+        catatanAplikasi: newPestisidaForm.catatanAplikasi,
         updateBy: 'operator_current',
-        status: 'pending_approval'
+        createdAt: new Date().toISOString()
       };
 
-      setFaseTanamRecords(prev => [newFaseRecord, ...prev]);
-      showToast('Update fase tanam berhasil disubmit untuk approval', 'success');
+      setPestisidaRecords(prev => [newPestisidaRecord, ...prev]);
+      showToast('Data penggunaan pestisida berhasil ditambahkan', 'success');
       handleCloseModal();
 
     } catch (error) {
@@ -527,36 +557,33 @@ const UpdateFaseTanamContent: React.FC = () => {
     });
   };
 
-  const getStatusBadge = (status: string) => {
+  const getJenisBadge = (jenis: string) => {
     const badges = {
-      pending_approval: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-      approved: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-      rejected: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
-    };
-
-    const labels = {
-      pending_approval: 'Pending Approval',
-      approved: 'Approved',
-      rejected: 'Rejected'
+      Insektisida: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+      Fungisida: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      Herbisida: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+      Bakterisida: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
     };
 
     return (
-      <span className={`px-2 py-1 text-xs font-medium rounded-full ${badges[status as keyof typeof badges]}`}>
-        {labels[status as keyof typeof labels]}
+      <span className={`px-2 py-1 text-xs font-medium rounded-full ${badges[jenis as keyof typeof badges]}`}>
+        {jenis}
       </span>
     );
   };
 
-  const getKondisiBadge = (kondisi: string) => {
+  const getKategoriBadge = (kategori: string) => {
     const badges = {
-      baik: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
-      cukup: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
-      buruk: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+      Serangga: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+      Jamur: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      Bakteri: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+      Gulma: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
+      Virus: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
     };
 
     return (
-      <span className={`px-2 py-1 text-xs font-medium rounded-full ${badges[kondisi as keyof typeof badges]}`}>
-        {kondisi.charAt(0).toUpperCase() + kondisi.slice(1)}
+      <span className={`px-2 py-1 text-xs font-medium rounded-full ${badges[kategori as keyof typeof badges]}`}>
+        {kategori}
       </span>
     );
   };
@@ -565,9 +592,9 @@ const UpdateFaseTanamContent: React.FC = () => {
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold mb-2">🔄 Update Fase Tanam</h1>
+        <h1 className="text-2xl font-bold mb-2">🧪 Update Penggunaan Pestisida</h1>
         <p className="text-emerald-100">
-          Kelola dan update fase pertumbuhan tanaman tembakau petani
+          Kelola dan catat penggunaan pestisida pada lahan tanam tembakau
         </p>
       </div>
 
@@ -641,8 +668,8 @@ const UpdateFaseTanamContent: React.FC = () => {
                 <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Varietas</th>
                 <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Tanggal Tanam</th>
                 <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Usia Tanaman</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Fase Terakhir</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Fase Berikutnya</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Aplikasi Terakhir</th>
+                <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Total Aplikasi</th>
                 <th className="px-4 py-3 text-left font-medium text-gray-700 dark:text-gray-300">Aksi</th>
               </tr>
             </thead>
@@ -662,8 +689,8 @@ const UpdateFaseTanamContent: React.FC = () => {
                   const lahan = getLahanById(record.lahanId);
                   const varietas = getVarietasById(record.varietasId);
                   const plantAge = calculatePlantAge(record.tanggalTanam);
-                  const latestFase = getLatestFase(record.id);
-                  const nextFase = getNextRecommendedFase(record.id, plantAge);
+                  const latestApplication = getLatestPestisidaApplication(record.id);
+                  const totalApplications = pestisidaRecords.filter(p => p.tanamId === record.id).length;
 
                   return (
                     <tr key={record.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50">
@@ -702,46 +729,35 @@ const UpdateFaseTanamContent: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-4 py-3">
-                        {latestFase ? (
+                        {latestApplication ? (
                           <div>
-                            <div className="font-medium text-gray-900 dark:text-white">
-                              {getFaseTanamById(latestFase.faseTanamId)?.nama}
+                            <div className="font-medium text-gray-900 dark:text-white text-xs">
+                              {getPestisidaById(latestApplication.pestisidaId)?.nama}
                             </div>
                             <div className="text-gray-500 dark:text-gray-400 text-xs">
-                              {formatDate(latestFase.tanggalUpdate)}
+                              {formatDate(latestApplication.tanggalAplikasi)}
                             </div>
-                            <div className="mt-1">
-                              {getKondisiBadge(latestFase.kondisiTanaman)}
+                            <div className="text-gray-500 dark:text-gray-400 text-xs">
+                              Usia: {latestApplication.usiaSeratAplikasi} hari
                             </div>
                           </div>
                         ) : (
-                          <span className="text-gray-400 dark:text-gray-500 italic">
-                            Belum ada update
+                          <span className="text-gray-400 dark:text-gray-500 italic text-xs">
+                            Belum ada aplikasi
                           </span>
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        {nextFase ? (
-                          <div>
-                            <div className="font-medium text-emerald-600 dark:text-emerald-400">
-                              {nextFase.nama}
-                            </div>
-                            <div className="text-gray-500 dark:text-gray-400 text-xs">
-                              Usia: {nextFase.minUsia}-{nextFase.maxUsia} hari
-                            </div>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 dark:text-gray-500 italic">
-                            Fase terakhir
-                          </span>
-                        )}
+                        <div className="font-medium text-emerald-600 dark:text-emerald-400">
+                          {totalApplications} kali
+                        </div>
                       </td>
                       <td className="px-4 py-3">
                         <button
                           onClick={() => handleOpenModal(record)}
                           className="inline-flex items-center px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-lg transition-colors duration-200"
                         >
-                          📋 Detail Fase
+                          🧪 Detail Pestisida
                         </button>
                       </td>
                     </tr>
@@ -753,15 +769,15 @@ const UpdateFaseTanamContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal Detail Fase Tanam */}
+      {/* Modal Detail Penggunaan Pestisida */}
       {showModal && selectedTanam && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
             <div className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white p-6 rounded-t-lg">
               <div className="flex justify-between items-start">
                 <div>
-                  <h2 className="text-xl font-bold mb-2">Detail Fase Tanam</h2>
+                  <h2 className="text-xl font-bold mb-2">Detail Penggunaan Pestisida</h2>
                   <div className="text-emerald-100 text-sm space-y-1">
                     <div>Petani: {getPetaniById(selectedTanam.petaniId)?.nama}</div>
                     <div>Lahan: {getLahanById(selectedTanam.lahanId)?.namaLahan}</div>
@@ -809,71 +825,88 @@ const UpdateFaseTanamContent: React.FC = () => {
                 </div>
               </div>
 
-              {/* Histori Fase Tanam */}
+              {/* Riwayat Penggunaan Pestisida */}
               <div>
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Histori Fase Tanam</h3>
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Riwayat Penggunaan Pestisida</h3>
                 <div className="space-y-3">
-                  {faseTanamRecords
-                    .filter(f => f.tanamId === selectedTanam.id)
-                    .sort((a, b) => {
-                      const faseA = getFaseTanamById(a.faseTanamId);
-                      const faseB = getFaseTanamById(b.faseTanamId);
-                      return (faseB?.urutan || 0) - (faseA?.urutan || 0);
-                    })
-                    .map((faseRecord) => {
-                      const fase = getFaseTanamById(faseRecord.faseTanamId);
+                  {pestisidaRecords
+                    .filter(p => p.tanamId === selectedTanam.id)
+                    .sort((a, b) => new Date(b.tanggalAplikasi).getTime() - new Date(a.tanggalAplikasi).getTime())
+                    .map((pestRecord) => {
+                      const pestisida = getPestisidaById(pestRecord.pestisidaId);
+                      const hama = getJenisHamaById(pestRecord.jenisHamaId);
                       return (
-                        <div key={faseRecord.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
-                          <div className="flex justify-between items-start mb-2">
+                        <div key={pestRecord.id} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
-                              <h4 className="font-medium text-gray-900 dark:text-white">
-                                {fase?.nama}
+                              <h4 className="font-medium text-gray-900 dark:text-white mb-1">
+                                {pestisida?.nama}
                               </h4>
-                              <p className="text-sm text-gray-600 dark:text-gray-400">
-                                {fase?.deskripsi}
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                {pestisida?.merek} - {pestisida?.bahanAktif}
                               </p>
+                              <div className="mb-2">
+                                {pestisida && getJenisBadge(pestisida.jenis)}
+                              </div>
                             </div>
-                            <div className="flex space-x-2">
-                              {getKondisiBadge(faseRecord.kondisiTanaman)}
-                              {getStatusBadge(faseRecord.status)}
+                            <div>
+                              <div className="space-y-1 text-sm">
+                                <div><strong>Tanggal Aplikasi:</strong> {formatDate(pestRecord.tanggalAplikasi)}</div>
+                                <div><strong>Usia Tanaman:</strong> {pestRecord.usiaSeratAplikasi} hari</div>
+                                <div><strong>Dosis:</strong> {pestRecord.dosis} {pestRecord.satuanDosis}</div>
+                                <div><strong>Metode:</strong> {pestRecord.metodeAplikasi}</div>
+                                <div><strong>Cuaca:</strong> {pestRecord.kondisiCuaca}</div>
+                              </div>
+                            </div>
+                            <div>
+                              <div className="mb-2">
+                                <strong className="text-sm">Target Hama:</strong>
+                                <div className="font-medium text-gray-900 dark:text-white">
+                                  {hama?.nama}
+                                </div>
+                                <div className="mt-1">
+                                  {hama && getKategoriBadge(hama.kategori)}
+                                </div>
+                              </div>
                             </div>
                           </div>
-                          <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            <strong>Tanggal Update:</strong> {formatDate(faseRecord.tanggalUpdate)}
-                          </div>
-                          <div className="text-sm text-gray-900 dark:text-white mb-2">
-                            <strong>Catatan:</strong> {faseRecord.catatanFase}
-                          </div>
-                          {faseRecord.approvalNote && (
-                            <div className="text-sm text-gray-600 dark:text-gray-400">
-                              <strong>Catatan Approval:</strong> {faseRecord.approvalNote}
+                          <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                            <div className="text-sm">
+                              <strong>Catatan:</strong> {pestRecord.catatanAplikasi}
                             </div>
-                          )}
+                          </div>
                         </div>
                       );
                     })}
+                  
+                  {pestisidaRecords.filter(p => p.tanamId === selectedTanam.id).length === 0 && (
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      <span className="text-4xl block mb-2">🧪</span>
+                      <span>Belum ada riwayat penggunaan pestisida</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* Form Input Fase Baru */}
+              {/* Form Tambah Pestisida Baru */}
               <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Update Fase Baru</h3>
-                <div className="space-y-4">
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Tambah Penggunaan Pestisida Baru</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Fase Tanam <span className="text-red-500">*</span>
+                      Pestisida <span className="text-red-500">*</span>
                     </label>
                     <select
-                      value={newFaseForm.faseTanamId}
-                      onChange={(e) => setNewFaseForm(prev => ({ ...prev, faseTanamId: e.target.value }))}
+                      value={newPestisidaForm.pestisidaId}
+                      onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, pestisidaId: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
-                      <option value="">-- Pilih Fase Tanam --</option>
-                      {mockFaseTanam
-                        .filter(f => f.status === 'active')
-                        .map(fase => (
-                          <option key={fase.id} value={fase.id}>
-                            {fase.nama} (Usia: {fase.minUsia}-{fase.maxUsia} hari)
+                      <option value="">-- Pilih Pestisida --</option>
+                      {mockPestisida
+                        .filter(p => p.status === 'active')
+                        .map(pestisida => (
+                          <option key={pestisida.id} value={pestisida.id}>
+                            {pestisida.nama} ({pestisida.merek}) - {pestisida.jenis}
                           </option>
                         ))}
                     </select>
@@ -881,31 +914,106 @@ const UpdateFaseTanamContent: React.FC = () => {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Kondisi Tanaman <span className="text-red-500">*</span>
+                      Tanggal Aplikasi <span className="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      value={newPestisidaForm.tanggalAplikasi}
+                      onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, tanggalAplikasi: e.target.value }))}
+                      min={selectedTanam.tanggalTanam}
+                      max={new Date().toISOString().split('T')[0]}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Dosis <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex space-x-2">
+                      <input
+                        type="number"
+                        step="0.1"
+                        value={newPestisidaForm.dosis}
+                        onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, dosis: e.target.value }))}
+                        className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="0.0"
+                      />
+                      <select
+                        value={newPestisidaForm.satuanDosis}
+                        onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, satuanDosis: e.target.value as any }))}
+                        className="w-32 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                      >
+                        <option value="ml/liter">ml/liter</option>
+                        <option value="gram/liter">gram/liter</option>
+                        <option value="liter/ha">liter/ha</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Target Hama <span className="text-red-500">*</span>
                     </label>
                     <select
-                      value={newFaseForm.kondisiTanaman}
-                      onChange={(e) => setNewFaseForm(prev => ({ ...prev, kondisiTanaman: e.target.value as any }))}
+                      value={newPestisidaForm.jenisHamaId}
+                      onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, jenisHamaId: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                     >
-                      <option value="baik">Baik</option>
-                      <option value="cukup">Cukup</option>
-                      <option value="buruk">Buruk</option>
+                      <option value="">-- Pilih Target Hama --</option>
+                      {mockJenisHama
+                        .filter(h => h.status === 'active')
+                        .map(hama => (
+                          <option key={hama.id} value={hama.id}>
+                            {hama.nama} ({hama.kategori})
+                          </option>
+                        ))}
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Catatan Fase <span className="text-red-500">*</span>
+                      Metode Aplikasi
                     </label>
-                    <textarea
-                      value={newFaseForm.catatanFase}
-                      onChange={(e) => setNewFaseForm(prev => ({ ...prev, catatanFase: e.target.value }))}
-                      rows={4}
+                    <select
+                      value={newPestisidaForm.metodeAplikasi}
+                      onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, metodeAplikasi: e.target.value as any }))}
                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                      placeholder="Jelaskan kondisi tanaman, progress pertumbuhan, dan catatan penting lainnya..."
-                    />
+                    >
+                      <option value="Semprot">Semprot</option>
+                      <option value="Siram">Siram</option>
+                      <option value="Tabur">Tabur</option>
+                      <option value="Fumigasi">Fumigasi</option>
+                    </select>
                   </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Kondisi Cuaca
+                    </label>
+                    <select
+                      value={newPestisidaForm.kondisiCuaca}
+                      onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, kondisiCuaca: e.target.value as any }))}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    >
+                      <option value="Cerah">Cerah</option>
+                      <option value="Berawan">Berawan</option>
+                      <option value="Hujan Ringan">Hujan Ringan</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Catatan Aplikasi <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    value={newPestisidaForm.catatanAplikasi}
+                    onChange={(e) => setNewPestisidaForm(prev => ({ ...prev, catatanAplikasi: e.target.value }))}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                    placeholder="Jelaskan kondisi aplikasi, efektivitas, dan catatan penting lainnya..."
+                  />
                 </div>
               </div>
 
@@ -918,11 +1026,11 @@ const UpdateFaseTanamContent: React.FC = () => {
                   Batal
                 </button>
                 <button
-                  onClick={handleSubmitFase}
-                  disabled={loading || !newFaseForm.faseTanamId || !newFaseForm.catatanFase.trim()}
+                  onClick={handleSubmitPestisida}
+                  disabled={loading || !newPestisidaForm.pestisidaId || !newPestisidaForm.dosis || !newPestisidaForm.jenisHamaId || !newPestisidaForm.catatanAplikasi.trim()}
                   className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? '⏳ Menyimpan...' : '📤 Submit Update'}
+                  {loading ? '⏳ Menyimpan...' : '🧪 Tambah Aplikasi'}
                 </button>
               </div>
             </div>
@@ -943,4 +1051,4 @@ const UpdateFaseTanamContent: React.FC = () => {
   );
 };
 
-export default UpdateFaseTanamContent;
+export default UpdatePestisidaContent;

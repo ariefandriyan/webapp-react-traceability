@@ -502,10 +502,10 @@ const ManajemenTanamContent: React.FC = () => {
   };
 
   return (
-    <div className="mx-auto">
+    <div className="p-6 space-y-6">
       {/* Header dengan Tab Navigation */}
-      <div className="text-white rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold mb-4">🌾 Manajemen Data Tanam</h1>
+      <div className="bg-gradient-to-r from-emerald-600 to-blue-600 text-white rounded-lg shadow-lg p-6">
+        <h1 className="text-2xl font-bold mb-4">🍃 Manajemen Data Tanam</h1>
         
         {/* Tab Navigation */}
         <div className="flex space-x-4">
