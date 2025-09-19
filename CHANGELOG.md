@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [2.1.0] - 2025-09-05
+## [2.1.0] - 2025-09-19
 
 ### ✨ Added
 - **🌙 Advanced Theme Management System**
@@ -44,6 +44,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **🔐 Advanced Permissions**: Tree-view permissions matrix dengan bulk selection
   - **🎛️ Application Settings**: Tabbed interface untuk konfigurasi sistem
   - **📱 Responsive Settings UI**: Optimal experience di semua device sizes
+
+- **📚 Documentation Overhaul**
+  - **📖 Comprehensive README**: Updated dengan struktur folder lengkap
+  - **🤝 Contributing Guidelines**: Detailed contribution process dan standards
+  - **📝 Changelog**: Version history dengan detailed change tracking
+  - **🏗️ Architecture Documentation**: Component dan data flow documentation
 
 ### 🔧 Improved
 - **📊 Enhanced Dashboard Experience**

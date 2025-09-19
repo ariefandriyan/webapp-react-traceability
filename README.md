@@ -68,45 +68,130 @@
 
 ## �️ Architecture
 
-### 📁 **Struktur Proyek**
+### 📁 **Struktur Proyek Lengkap**
 
 ```
-src/
-├── 📱 components/           # Komponen UI yang dapat digunakan kembali
-│   ├── activities/         # Komponen untuk aktivitas pertanian
-│   ├── aksesibilitas/      # Komponen manajemen aksesibilitas
-│   ├── approval/           # Komponen workflow approval
-│   ├── dashboard/          # Komponen dashboard dan analytics
-│   ├── fase-tanam/         # Komponen manajemen fase tanam
-│   ├── kelompok-tani/      # Komponen kelompok tani
-│   ├── layout/             # Komponen layout dan navigasi
-│   ├── map/                # Komponen peta dan visualisasi geografis
-│   ├── pestisida/          # Komponen manajemen pestisida
-│   ├── petani/             # Komponen data petani
-│   ├── reports/            # Komponen sistem reporting
-│   ├── settings/           # Komponen pengaturan sistem
-│   ├── traceability/       # Komponen tracking dan traceability
-│   ├── ui/                 # Komponen UI primitif (buttons, forms, dll)
-│   └── varietas/           # Komponen varietas tembakau
+tobacco-traceability-web-app/
+├── � public/                       # Static assets
+│   ├── 🖼️ images/                   # Image assets
+│   ├── 📄 favicon.ico               # Application favicon
+│   └── 📋 manifest.json             # PWA manifest
 │
-├── 📄 pages/               # Halaman utama aplikasi
-│   ├── master-data/        # Halaman master data
-│   ├── dashboard.tsx       # Dashboard utama
-│   ├── login.tsx           # Halaman autentikasi
-│   ├── LahanPetaPage.tsx   # Halaman peta lahan
-│   ├── FaseTanamPage.tsx   # Halaman fase tanam
-│   ├── PestisidaPage.tsx   # Halaman pestisida
-│   └── AksesibilitasPage.tsx # Halaman aksesibilitas
+├── 📂 src/                          # Source code
+│   ├── 📱 components/               # Reusable UI components
+│   │   ├── activities/             # Agricultural activity components
+│   │   ├── aksesibilitas/          # Road accessibility components
+│   │   ├── approval/               # Approval workflow components
+│   │   ├── dashboard/              # Dashboard dan analytics components
+│   │   ├── fase-tanam/             # Planting phase management
+│   │   ├── kelompok-tani/          # Farmer group management
+│   │   ├── layout/                 # Layout dan navigation components
+│   │   ├── map/                    # Map visualization components
+│   │   ├── pestisida/              # Pesticide management components
+│   │   ├── petani/                 # Farmer data components
+│   │   ├── reports/                # Reporting system components
+│   │   ├── settings/               # System settings components
+│   │   │   ├── PenggunaContent.tsx # User management interface
+│   │   │   ├── HakAksesContent.tsx # Permission management (tree-view)
+│   │   │   └── AplikasiContent.tsx # Application settings
+│   │   ├── traceability/           # Traceability tracking components
+│   │   ├── ui/                     # Primitive UI components
+│   │   │   ├── button.tsx          # Button components
+│   │   │   ├── input.tsx           # Form input components
+│   │   │   ├── modal.tsx           # Modal components
+│   │   │   └── table.tsx           # Table components
+│   │   ├── varietas/               # Tobacco variety components
+│   │   ├── icons.tsx               # Icon definitions
+│   │   ├── navbar.tsx              # Navigation bar
+│   │   ├── theme-switch.tsx        # Theme toggle component
+│   │   └── index.ts                # Component exports
+│   │
+│   ├── 📄 pages/                   # Page components
+│   │   ├── master-data/            # Master data pages
+│   │   ├── dashboard.tsx           # Main dashboard page
+│   │   ├── login.tsx               # Authentication page (w/ theme support)
+│   │   ├── LahanPetaPage.tsx       # Land mapping page
+│   │   ├── FaseTanamPage.tsx       # Planting phase page
+│   │   ├── PestisidaPage.tsx       # Pesticide management page
+│   │   └── AksesibilitasPage.tsx   # Road accessibility page
+│   │
+│   ├── 🎮 controllers/             # Navigation dan flow controllers
+│   │   └── ContentRenderer.tsx     # Main content routing controller
+│   │
+│   ├── 🔗 contexts/                # React Context providers
+│   │   ├── ThemeContext.tsx        # Theme management context
+│   │   └── AuthContext.tsx         # Authentication context
+│   │
+│   ├── 🪝 hooks/                   # Custom React hooks
+│   │   ├── useTheme.ts             # Theme management hook
+│   │   ├── useLocalStorage.ts      # Local storage hook
+│   │   └── useAuth.ts              # Authentication hook
+│   │
+│   ├── 🏗️ layouts/                 # Layout components
+│   │   ├── MainLayout.tsx          # Main application layout
+│   │   └── AuthLayout.tsx          # Authentication layout
+│   │
+│   ├── 🔧 lib/                     # Utility libraries
+│   │   ├── utils.ts                # General utilities
+│   │   ├── theme.ts                # Theme utilities
+│   │   └── validation.ts           # Form validation
+│   │
+│   ├── 🌐 services/                # API services dan data fetching
+│   │   ├── api.ts                  # API client configuration
+│   │   ├── auth.ts                 # Authentication services
+│   │   └── data.ts                 # Data fetching services
+│   │
+│   ├── 🎨 styles/                  # Styling files
+│   │   ├── globals.css             # Global styles
+│   │   ├── index.css               # Root styles dengan Tailwind imports
+│   │   └── components.css          # Component-specific styles
+│   │
+│   ├── 📝 types/                   # TypeScript type definitions
+│   │   ├── index.ts                # Common type exports
+│   │   ├── api.ts                  # API response types
+│   │   ├── auth.ts                 # Authentication types
+│   │   ├── components.ts           # Component prop types
+│   │   └── data.ts                 # Data model types
+│   │
+│   ├── ⚙️ config/                  # Configuration files
+│   │   ├── constants.ts            # Application constants
+│   │   ├── routes.ts               # Route definitions
+│   │   └── theme.ts                # Theme configuration
+│   │
+│   ├── 📊 data/                    # Static data dan mock data
+│   │   ├── sample-data.ts          # Sample application data
+│   │   └── mock-api.ts             # Mock API responses
+│   │
+│   ├── 🔄 provider.tsx             # Root providers wrapper
+│   ├── 🚀 App.tsx                  # Main application component
+│   ├── 🎯 main.tsx                 # Application entry point
+│   └── 🔧 vite-env.d.ts           # Vite type definitions
 │
-├── 🎮 controllers/         # Logic controllers dan navigation
-├── 🔗 contexts/           # React Context untuk state management
-├── 🪝 hooks/              # Custom React hooks
-├── 🏗️ layouts/            # Layout components
-├── 🔧 lib/                # Utility libraries dan helpers
-├── 🌐 services/           # API services dan data fetching
-├── 🎨 styles/             # Global styles dan Tailwind config
-├── 📝 types/              # TypeScript type definitions
-└── ⚙️ config/             # Configuration files
+├── 📂 docker/                      # Docker configuration
+│   ├── 🐳 Dockerfile              # Production container
+│   ├── 🐳 Dockerfile.dev          # Development container
+│   ├── ⚙️ nginx.conf              # Nginx configuration
+│   └── 🔧 docker-compose.yml       # Container orchestration
+│
+├── 📂 scripts/                     # Automation scripts
+│   ├── 🚀 deploy.sh               # Deployment automation
+│   ├── 📦 release.sh              # Release management
+│   ├── 💾 backup.sh               # Backup system
+│   └── 📊 monitor.sh              # Monitoring tools
+│
+├── 📂 docs/                        # Documentation
+│   ├── 📖 README-DOCKER.md        # Docker setup guide
+│   ├── 🤝 CONTRIBUTING.md         # Contribution guidelines
+│   ├── 📝 CHANGELOG.md            # Version history
+│   └── 🎨 BRANDING.md             # Brand guidelines
+│
+├── ⚙️ package.json                # Project dependencies
+├── 📘 tsconfig.json               # TypeScript configuration
+├── 🎨 tailwind.config.js          # Tailwind CSS configuration
+├── ⚡ vite.config.ts              # Vite build configuration
+├── 🔍 eslint.config.js            # ESLint configuration
+├── 🌿 .env.example                # Environment variables template
+└── 📄 README.md                   # Project documentation
 ```
 
 ### 🔄 **Data Flow Architecture**
