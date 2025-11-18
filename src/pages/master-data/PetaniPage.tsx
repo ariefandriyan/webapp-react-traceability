@@ -28,6 +28,7 @@ const PetaniPage = () => {
   const animateProgress = (duration: number) => {
     setLoadingProgress(0);
     const startTime = Date.now();
+    let animationFrameId: number;
     
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
@@ -35,22 +36,38 @@ const PetaniPage = () => {
       setLoadingProgress(progress);
       
       if (progress < 95) {
-        requestAnimationFrame(updateProgress);
+        animationFrameId = requestAnimationFrame(updateProgress);
       }
     };
     
-    requestAnimationFrame(updateProgress);
+    animationFrameId = requestAnimationFrame(updateProgress);
+    
+    // Return cleanup function
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   };
 
   const completeProgress = () => {
     setLoadingProgress(100);
-    setTimeout(() => setLoadingProgress(0), 500);
+    setTimeout(() => {
+      setLoadingProgress(0);
+    }, 500);
   };
 
   const showSuccess = (message: string) => {
     setSuccessMessage(message);
     setTimeout(() => setSuccessMessage(null), 3000);
   };
+
+  // Cleanup progress bar on unmount
+  useEffect(() => {
+    return () => {
+      setLoadingProgress(0);
+    };
+  }, []);
 
   // Load initial data
   useEffect(() => {
@@ -62,8 +79,9 @@ const PetaniPage = () => {
   useEffect(() => {
     if (!loading) {
       setActionLoading('filter');
-      animateProgress(800);
+      const cleanup = animateProgress(800);
       loadPetaniData();
+      return cleanup;
     }
   }, [filters]);
 
@@ -76,8 +94,10 @@ const PetaniPage = () => {
       setError(null);
       
       const response = await petaniService.getAllPetani({
-        filters,
-        sort: { field: 'nama', direction: 'asc' }
+        page: 1,
+        limit: 100,
+        search: filters.nama || filters.nik,
+        statusAktif: filters.statusAktif
       });
       
       setPetaniData(response.data);
@@ -85,7 +105,8 @@ const PetaniPage = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Terjadi kesalahan saat memuat data');
       console.error('Error loading petani data:', err);
-      completeProgress();
+      // Ensure progress completes even on error
+      setLoadingProgress(0);
     } finally {
       setLoading(false);
       setActionLoading(null);
@@ -94,8 +115,15 @@ const PetaniPage = () => {
 
   const loadStatistics = async () => {
     try {
-      const stats = await petaniService.getPetaniStatistics();
-      setStatistics(stats);
+      const stats = await petaniService.getStats();
+      setStatistics({
+        total: stats.total,
+        active: stats.aktif,
+        inactive: stats.nonaktif,
+        totalLahan: stats.totalLahan,
+        avgLahan: stats.avgLahan,
+        kelompokTaniCount: stats.kelompokTaniCount
+      });
     } catch (err) {
       console.error('Error loading statistics:', err);
     }
@@ -126,7 +154,8 @@ const PetaniPage = () => {
       showSuccess('Data petani berhasil dihapus');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Gagal menghapus data petani');
-      completeProgress();
+      // Reset progress immediately on error
+      setLoadingProgress(0);
     } finally {
       setActionLoading(null);
     }
@@ -158,7 +187,8 @@ const PetaniPage = () => {
       completeProgress();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Gagal menyimpan data petani');
-      completeProgress();
+      // Reset progress immediately on error
+      setLoadingProgress(0);
     } finally {
       setActionLoading(null);
     }

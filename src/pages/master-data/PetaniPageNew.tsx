@@ -40,8 +40,10 @@ const PetaniPage = () => {
       setError(null);
       
       const response = await petaniService.getAllPetani({
-        filters,
-        sort: { field: 'nama', direction: 'asc' }
+        page: 1,
+        limit: 100,
+        search: filters.nama || filters.nik,
+        statusAktif: filters.statusAktif
       });
       
       setPetaniData(response.data);
@@ -55,8 +57,15 @@ const PetaniPage = () => {
 
   const loadStatistics = async () => {
     try {
-      const stats = await petaniService.getPetaniStatistics();
-      setStatistics(stats);
+      const stats = await petaniService.getStats();
+      setStatistics({
+        total: stats.total,
+        active: stats.aktif,
+        inactive: stats.nonaktif,
+        totalLahan: stats.totalLahan,
+        avgLahan: stats.avgLahan,
+        kelompokTaniCount: stats.kelompokTaniCount
+      });
     } catch (err) {
       console.error('Error loading statistics:', err);
     }

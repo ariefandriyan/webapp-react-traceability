@@ -1,257 +1,85 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { KelompokTani, KelompokTaniFilters } from '../../types/kelompokTani';
 import KelompokTaniTable from '../../components/kelompok-tani/KelompokTaniTable';
 import KelompokTaniForm from '../../components/kelompok-tani/KelompokTaniForm';
 import KelompokTaniDetailModal from '../../components/kelompok-tani/KelompokTaniDetailModal';
+import kelompokTaniService from '../../services/kelompokTaniService';
 
-// Sample data kelompok tani
-const sampleKelompokTaniData: KelompokTani[] = [
-  {
-    id: '1',
-    kodeKelompok: 'KT001',
-    namaKelompok: 'Tani Makmur Sejahtera',
-    ketuaKelompok: 'Budi Santoso',
-    waktuBentuk: '2020-03-15',
-    alamat: 'Jl. Raya Desa No. 45',
-    desa: 'Tanjungsari',
-    kecamatan: 'Sukorejo',
-    kabupaten: 'Kediri',
-    provinsi: 'Jawa Timur',
-    kodePos: '64293',
-    noTelepon: '08123456789',
-    email: 'tanimakmur@email.com',
-    jumlahAnggota: 25,
-    luasTotalLahan: 15.5,
-    komoditasUtama: 'Tembakau Virginia',
-    statusLegalitas: 'Terdaftar',
-    skKelompok: 'SK/001/2020',
-    tanggalSK: '2020-03-20',
-    pembina: 'Ir. Siti Nurlaila',
-    bankMitra: 'Bank BRI',
-    noRekeningKelompok: '1234567890',
-    statusAktif: true,
-    tanggalDaftar: '2020-03-15',
-    catatan: 'Kelompok tani aktif dengan produksi stabil'
-  },
-  {
-    id: '2',
-    kodeKelompok: 'KT002',
-    namaKelompok: 'Sumber Rezeki',
-    ketuaKelompok: 'Ahmad Fadil',
-    waktuBentuk: '2019-08-10',
-    alamat: 'Dusun Krajan RT 02 RW 01',
-    desa: 'Karangasem',
-    kecamatan: 'Pacet',
-    kabupaten: 'Malang',
-    provinsi: 'Jawa Timur',
-    kodePos: '65162',
-    noTelepon: '08234567890',
-    jumlahAnggota: 18,
-    luasTotalLahan: 12.3,
-    komoditasUtama: 'Tembakau Burley',
-    statusLegalitas: 'Terdaftar',
-    skKelompok: 'SK/002/2019',
-    tanggalSK: '2019-08-15',
-    pembina: 'Dr. Agr. Bambang Sutrisno',
-    bankMitra: 'Bank Mandiri',
-    noRekeningKelompok: '9876543210',
-    statusAktif: true,
-    tanggalDaftar: '2019-08-10'
-  },
-  {
-    id: '3',
-    kodeKelompok: 'KT003',
-    namaKelompok: 'Harapan Baru',
-    ketuaKelompok: 'Sugeng Riyanto',
-    waktuBentuk: '2021-01-20',
-    alamat: 'Jl. Pahlawan No. 12',
-    desa: 'Bendosari',
-    kecamatan: 'Kras',
-    kabupaten: 'Kediri',
-    provinsi: 'Jawa Timur',
-    kodePos: '64181',
-    noTelepon: '08345678901',
-    email: 'harapanbaru@gmail.com',
-    jumlahAnggota: 30,
-    luasTotalLahan: 22.8,
-    komoditasUtama: 'Tembakau Rajangan',
-    statusLegalitas: 'Dalam Proses',
-    pembina: 'Ir. Made Sutrisna, M.P.',
-    bankMitra: 'Bank BCA',
-    statusAktif: true,
-    tanggalDaftar: '2021-01-20',
-    catatan: 'Kelompok baru dengan potensi berkembang'
-  },
-  {
-    id: '4',
-    kodeKelompok: 'KT004',
-    namaKelompok: 'Maju Bersama',
-    ketuaKelompok: 'Dwi Cahyono',
-    waktuBentuk: '2018-11-05',
-    alamat: 'Dusun Sumber RT 03 RW 02',
-    desa: 'Wonorejo',
-    kecamatan: 'Lawang',
-    kabupaten: 'Malang',
-    provinsi: 'Jawa Timur',
-    kodePos: '65211',
-    noTelepon: '08456789012',
-    jumlahAnggota: 22,
-    luasTotalLahan: 18.7,
-    komoditasUtama: 'Tembakau Virginia',
-    statusLegalitas: 'Terdaftar',
-    skKelompok: 'SK/004/2018',
-    tanggalSK: '2018-11-10',
-    pembina: 'Ir. Wayan Sudarma',
-    bankMitra: 'Bank BNI',
-    noRekeningKelompok: '5647382910',
-    statusAktif: true,
-    tanggalDaftar: '2018-11-05'
-  },
-  {
-    id: '5',
-    kodeKelompok: 'KT005',
-    namaKelompok: 'Tani Jaya',
-    ketuaKelompok: 'Eko Prasetyo',
-    waktuBentuk: '2022-06-12',
-    alamat: 'Jl. Merdeka No. 88',
-    desa: 'Sidorejo',
-    kecamatan: 'Pare',
-    kabupaten: 'Kediri',
-    provinsi: 'Jawa Timur',
-    kodePos: '64213',
-    noTelepon: '08567890123',
-    email: 'tanijaya2022@email.com',
-    jumlahAnggota: 15,
-    luasTotalLahan: 9.5,
-    komoditasUtama: 'Tembakau Burley',
-    statusLegalitas: 'Belum Terdaftar',
-    pembina: 'Ir. Ni Made Sari, S.P.',
-    statusAktif: true,
-    tanggalDaftar: '2022-06-12',
-    catatan: 'Kelompok baru masih dalam proses legalisasi'
-  },
-  {
-    id: '6',
-    kodeKelompok: 'KT006',
-    namaKelompok: 'Subur Makmur',
-    ketuaKelompok: 'Tri Wahyudi',
-    waktuBentuk: '2020-09-08',
-    alamat: 'Dusun Tengah RT 01 RW 03',
-    desa: 'Candirenggo',
-    kecamatan: 'Singosari',
-    kabupaten: 'Malang',
-    provinsi: 'Jawa Timur',
-    kodePos: '65153',
-    noTelepon: '08678901234',
-    jumlahAnggota: 28,
-    luasTotalLahan: 20.2,
-    komoditasUtama: 'Tembakau Rajangan',
-    statusLegalitas: 'Terdaftar',
-    skKelompok: 'SK/006/2020',
-    tanggalSK: '2020-09-15',
-    pembina: 'Dr. Ir. Agus Setiawan, M.Si.',
-    bankMitra: 'Bank Jatim',
-    noRekeningKelompok: '7890123456',
-    statusAktif: true,
-    tanggalDaftar: '2020-09-08'
-  },
-  {
-    id: '7',
-    kodeKelompok: 'KT007',
-    namaKelompok: 'Berkah Tani',
-    ketuaKelompok: 'Wahyu Hidayat',
-    waktuBentuk: '2021-12-03',
-    alamat: 'Jl. Diponegoro No. 156',
-    desa: 'Grogol',
-    kecamatan: 'Kediri',
-    kabupaten: 'Kediri',
-    provinsi: 'Jawa Timur',
-    kodePos: '64122',
-    noTelepon: '08789012345',
-    email: 'berkahtani@yahoo.com',
-    jumlahAnggota: 20,
-    luasTotalLahan: 14.6,
-    komoditasUtama: 'Tembakau Virginia',
-    statusLegalitas: 'Dalam Proses',
-    pembina: 'Ir. Kadek Suari, M.P.',
-    bankMitra: 'Bank BTN',
-    statusAktif: false,
-    tanggalDaftar: '2021-12-03',
-    catatan: 'Kelompok sedang tidak aktif sementara'
-  },
-  {
-    id: '8',
-    kodeKelompok: 'KT008',
-    namaKelompok: 'Gotong Royong',
-    ketuaKelompok: 'Bambang Wijaya',
-    waktuBentuk: '2019-04-25',
-    alamat: 'Dusun Sawah RT 04 RW 01',
-    desa: 'Sumberejo',
-    kecamatan: 'Batu',
-    kabupaten: 'Malang',
-    provinsi: 'Jawa Timur',
-    kodePos: '65311',
-    noTelepon: '08890123456',
-    jumlahAnggota: 35,
-    luasTotalLahan: 28.4,
-    komoditasUtama: 'Tembakau Burley',
-    statusLegalitas: 'Terdaftar',
-    skKelompok: 'SK/008/2019',
-    tanggalSK: '2019-05-01',
-    pembina: 'Ir. Putu Suryawan, S.P.',
-    bankMitra: 'Bank BRI',
-    noRekeningKelompok: '2468135790',
-    statusAktif: true,
-    tanggalDaftar: '2019-04-25'
-  }
-];
-
-const KelompokTaniPage: React.FC = () => {
-  const [kelompokTaniData, setKelompokTaniData] = useState<KelompokTani[]>(sampleKelompokTaniData);
-  const [filteredData, setFilteredData] = useState<KelompokTani[]>(sampleKelompokTaniData);
-  const [filters, setFilters] = useState<KelompokTaniFilters>({});
+const KelompokTaniPage = () => {
+  const [kelompokTaniData, setKelompokTaniData] = useState<KelompokTani[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
   const [selectedKelompok, setSelectedKelompok] = useState<KelompokTani | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [filters, setFilters] = useState<KelompokTaniFilters>({});
+  const [statistics, setStatistics] = useState({
+    total: 0,
+    active: 0,
+    inactive: 0,
+    terdaftar: 0,
+    belumTerdaftar: 0,
+    dalamProses: 0,
+    totalAnggota: 0,
+    totalLuasLahan: 0
+  });
 
-  // Filter data berdasarkan kriteria
+  // Load initial data
   useEffect(() => {
-    let filtered = [...kelompokTaniData];
+    loadKelompokTaniData();
+    loadStatistics();
+  }, []);
 
-    if (filters.search) {
-      const searchLower = filters.search.toLowerCase();
-      filtered = filtered.filter(kelompok =>
-        kelompok.namaKelompok.toLowerCase().includes(searchLower) ||
-        kelompok.kodeKelompok.toLowerCase().includes(searchLower) ||
-        kelompok.ketuaKelompok.toLowerCase().includes(searchLower) ||
-        kelompok.desa.toLowerCase().includes(searchLower) ||
-        kelompok.kecamatan.toLowerCase().includes(searchLower)
-      );
+  // Load data when filters change
+  useEffect(() => {
+    if (!loading) {
+      loadKelompokTaniData();
     }
+  }, [filters]);
 
-    if (filters.statusLegalitas) {
-      filtered = filtered.filter(kelompok => kelompok.statusLegalitas === filters.statusLegalitas);
+  const loadKelompokTaniData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await kelompokTaniService.getAllKelompokTani({
+        page: 1,
+        limit: 100,
+        search: filters.search,
+        statusLegalitas: filters.statusLegalitas,
+        statusAktif: filters.statusAktif,
+        kecamatan: filters.kecamatan,
+        kabupaten: filters.kabupaten,
+        komoditasUtama: filters.komoditasUtama
+      });
+      
+      setKelompokTaniData(response.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Terjadi kesalahan saat memuat data');
+      console.error('Error loading kelompok tani data:', err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    if (filters.statusAktif !== undefined) {
-      filtered = filtered.filter(kelompok => kelompok.statusAktif === filters.statusAktif);
+  const loadStatistics = async () => {
+    try {
+      const stats = await kelompokTaniService.getStats();
+      setStatistics({
+        total: stats.total,
+        active: stats.aktif,
+        inactive: stats.nonaktif,
+        terdaftar: stats.terdaftar,
+        belumTerdaftar: stats.belumTerdaftar,
+        dalamProses: stats.dalamProses,
+        totalAnggota: stats.totalAnggota,
+        totalLuasLahan: stats.totalLuasLahan
+      });
+    } catch (err) {
+      console.error('Error loading statistics:', err);
     }
-
-    if (filters.kecamatan) {
-      filtered = filtered.filter(kelompok => kelompok.kecamatan === filters.kecamatan);
-    }
-
-    if (filters.kabupaten) {
-      filtered = filtered.filter(kelompok => kelompok.kabupaten === filters.kabupaten);
-    }
-
-    if (filters.komoditasUtama) {
-      filtered = filtered.filter(kelompok => kelompok.komoditasUtama === filters.komoditasUtama);
-    }
-
-    setFilteredData(filtered);
-  }, [kelompokTaniData, filters]);
+  };
 
   const handleAddKelompok = () => {
     setSelectedKelompok(null);
@@ -266,9 +94,20 @@ const KelompokTaniPage: React.FC = () => {
     setShowDetail(false);
   };
 
-  const handleDeleteKelompok = (id: string) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus kelompok tani ini?')) {
-      setKelompokTaniData(prev => prev.filter(kelompok => kelompok.id !== id));
+  const handleDeleteKelompok = async (id: string) => {
+    if (!window.confirm('Apakah Anda yakin ingin menghapus kelompok tani ini?')) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await kelompokTaniService.deleteKelompokTani(id);
+      await loadKelompokTaniData();
+      await loadStatistics();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Gagal menghapus data kelompok tani');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -277,167 +116,289 @@ const KelompokTaniPage: React.FC = () => {
     setShowDetail(true);
   };
 
-  const handleSaveKelompok = (kelompokData: Omit<KelompokTani, 'id' | 'tanggalDaftar'>) => {
-    if (isEditing && selectedKelompok) {
-      // Update existing
-      setKelompokTaniData(prev => 
-        prev.map(kelompok => 
-          kelompok.id === selectedKelompok.id 
-            ? { ...kelompokData, id: selectedKelompok.id, tanggalDaftar: selectedKelompok.tanggalDaftar }
-            : kelompok
-        )
-      );
-    } else {
-      // Add new
-      const newKelompok: KelompokTani = {
-        ...kelompokData,
-        id: Date.now().toString(),
-        tanggalDaftar: new Date().toISOString().split('T')[0]
-      };
-      setKelompokTaniData(prev => [...prev, newKelompok]);
+  const handleSaveKelompok = async (kelompokData: Omit<KelompokTani, 'id' | 'tanggalDaftar'>) => {
+    try {
+      setLoading(true);
+      
+      if (isEditing && selectedKelompok) {
+        await kelompokTaniService.updateKelompokTani(selectedKelompok.id, kelompokData);
+      } else {
+        await kelompokTaniService.createKelompokTani(kelompokData);
+      }
+      
+      setShowForm(false);
+      setSelectedKelompok(null);
+      setIsEditing(false);
+      await loadKelompokTaniData();
+      await loadStatistics();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Gagal menyimpan data kelompok tani');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleCancelForm = () => {
     setShowForm(false);
     setSelectedKelompok(null);
+    setIsEditing(false);
   };
 
   const handleFiltersChange = (newFilters: KelompokTaniFilters) => {
     setFilters(newFilters);
   };
 
-  // Calculate statistics
-  const totalKelompok = kelompokTaniData.length;
-  const activeKelompok = kelompokTaniData.filter(k => k.statusAktif).length;
-  const terdaftarKelompok = kelompokTaniData.filter(k => k.statusLegalitas === 'Terdaftar').length;
-  const totalAnggota = kelompokTaniData.reduce((sum, k) => sum + k.jumlahAnggota, 0);
-  const totalLahan = kelompokTaniData.reduce((sum, k) => sum + k.luasTotalLahan, 0);
+  if (loading && kelompokTaniData.length === 0) {
+    return (
+      <div className="p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Memuat data kelompok tani...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <div className="text-red-500 mb-4">
+                <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">Terjadi Kesalahan</h3>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button
+                onClick={() => {
+                  setError(null);
+                  loadKelompokTaniData();
+                }}
+                className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
+              >
+                Coba Lagi
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Master Data Kelompok Tani</h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Kelola data kelompok tani dan informasi organisasi petani
-          </p>
+          <h1 className="text-2xl font-bold text-gray-900">Master Data Kelompok Tani</h1>
+          <p className="text-gray-600 mt-1">Kelola data dan informasi kelompok tani tembakau</p>
         </div>
         <button
           onClick={handleAddKelompok}
-          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors duration-200 flex items-center space-x-2"
+          disabled={loading}
+          className="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
-          <span>Tambah Kelompok Tani Baru</span>
+          Tambah Kelompok Tani
         </button>
       </div>
 
       {/* Statistics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+              </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Kelompok</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalKelompok}</p>
+              <p className="text-sm font-medium text-gray-500">Total Kelompok</p>
+              <p className="text-2xl font-semibold text-gray-900">{statistics.total}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Kelompok Aktif</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{activeKelompok}</p>
+              <p className="text-sm font-medium text-gray-500">Aktif</p>
+              <p className="text-2xl font-semibold text-green-600">{statistics.active}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Terdaftar Legal</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{terdaftarKelompok}</p>
+              <p className="text-sm font-medium text-gray-500">Tidak Aktif</p>
+              <p className="text-2xl font-semibold text-red-600">{statistics.inactive}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Anggota</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalAnggota}</p>
+              <p className="text-sm font-medium text-gray-500">Terdaftar</p>
+              <p className="text-2xl font-semibold text-emerald-600">{statistics.terdaftar}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-              </svg>
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-yellow-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
             </div>
             <div className="ml-4">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Lahan</p>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalLahan.toFixed(1)} Ha</p>
+              <p className="text-sm font-medium text-gray-500">Dalam Proses</p>
+              <p className="text-2xl font-semibold text-yellow-600">{statistics.dalamProses}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-500">Belum Terdaftar</p>
+              <p className="text-2xl font-semibold text-gray-600">{statistics.belumTerdaftar}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-500">Total Anggota</p>
+              <p className="text-2xl font-semibold text-purple-600">{statistics.totalAnggota}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center">
+                <svg className="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17v4a2 2 0 002 2h4M13 13h4" />
+                </svg>
+              </div>
+            </div>
+            <div className="ml-4">
+              <p className="text-sm font-medium text-gray-500">Total Luas Lahan</p>
+              <p className="text-2xl font-semibold text-indigo-600">{statistics.totalLuasLahan} Ha</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Data Table */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-        <KelompokTaniTable
-          data={filteredData}
-          filters={filters}
-          onFiltersChange={handleFiltersChange}
-          onEdit={handleEditKelompok}
-          onDelete={handleDeleteKelompok}
-          onViewDetail={handleViewDetail}
-        />
-      </div>
+      {/* Loading overlay for actions */}
+      {loading && kelompokTaniData.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-600"></div>
+              <span className="text-gray-600">Memproses...</span>
+            </div>
+          </div>
+        </div>
+      )}
 
-      {/* Form Modal */}
+      {/* Error notification */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center justify-between">
+          <div className="flex items-center">
+            <svg className="w-5 h-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="text-red-700">{error}</span>
+          </div>
+          <button
+            onClick={() => setError(null)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+
+      {/* Table */}
+      <KelompokTaniTable
+        data={kelompokTaniData}
+        onEdit={handleEditKelompok}
+        onDelete={handleDeleteKelompok}
+        onViewDetail={handleViewDetail}
+        onFiltersChange={handleFiltersChange}
+        filters={filters}
+      />
+
+      {/* Modals */}
       {showForm && (
         <KelompokTaniForm
-          kelompok={selectedKelompok}
+          kelompok={selectedKelompok || undefined}
           isEditing={isEditing}
           onSave={handleSaveKelompok}
-          onCancel={() => {
-            setShowForm(false);
-            setSelectedKelompok(null);
-          }}
+          onCancel={handleCancelForm}
         />
       )}
 
-      {/* Detail Modal */}
       {showDetail && selectedKelompok && (
         <KelompokTaniDetailModal
           kelompok={selectedKelompok}
-          onClose={() => {
-            setShowDetail(false);
-            setSelectedKelompok(null);
-          }}
+          onClose={() => setShowDetail(false)}
         />
       )}
     </div>

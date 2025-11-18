@@ -5,11 +5,12 @@
 ![Tobacco Traceability](https://img.shields.io/badge/Tobacco-Traceability-green?style=for-the-badge&logo=leaf)
 ![React](https://img.shields.io/badge/React-18.0+-61DAFB?style=for-the-badge&logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript)
+![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js)
 ![Tailwind](https://img.shields.io/badge/Tailwind-CSS-06B6D4?style=for-the-badge&logo=tailwindcss)
-![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
-**Sistem manajemen traceability tembakau komprehensif dengan dukungan Dark/Light Mode, manajemen pertanian terintegrasi, dan interface modern**
+**Full-stack monorepo sistem traceability tembakau dengan Frontend React + Backend API Node.js/Express**
 
 [🚀 Quick Start](#-quick-start) • [📋 Features](#-features) • [🏗️ Architecture](#️-architecture) • [🛠️ Tech Stack](#️-tech-stack) • [📖 Documentation](#-documentation)
 
@@ -19,7 +20,21 @@
 
 ## 📖 Overview
 
-**Tobacco Traceability System** adalah aplikasi web enterprise-grade yang dirancang khusus untuk mendukung transparansi dan manajemen kualitas produksi tembakau di Indonesia. Dikembangkan untuk Universitas Brawijaya, sistem ini menyediakan solusi terintegrasi untuk melacak seluruh rantai pasok tembakau mulai dari penanaman hingga distribusi.
+**Tobacco Traceability System** adalah full-stack application yang dirancang untuk transparansi dan manajemen kualitas produksi tembakau. Project ini menggunakan **monorepo structure** dengan:
+
+- **Frontend**: React 18 + TypeScript + Vite + TailwindCSS (Port 5173)
+- **Backend**: Node.js + Express + Sequelize + MySQL (Port 3000)
+- **Development**: Concurrently untuk run both servers dengan single command
+- **Integration**: Service layer pattern dengan type mappers untuk seamless data flow
+
+### ✅ Integration Status
+
+- ✅ **Backend API**: Fully functional REST API dengan MySQL database
+- ✅ **Service Layer**: Type-safe service layer dengan automatic data mapping
+- ✅ **CRUD Operations**: Create, Read, Update, Delete untuk Master Data Petani
+- ✅ **Type Safety**: TypeScript end-to-end dengan mapper functions
+- ✅ **CORS**: Configured untuk cross-origin requests
+- ⏳ **Testing**: UI form submission testing in progress
 
 ### 🎯 Tujuan Sistem
 
@@ -28,6 +43,66 @@
 - **✅ Quality Assurance**: Kontrol kualitas melalui monitoring fase tanam dan penggunaan pestisida
 - **📊 Data-Driven Decisions**: Analytics dan reporting untuk pengambilan keputusan strategis
 - **🤝 Stakeholder Management**: Platform terintegrasi untuk semua pemangku kepentingan
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js >= 14.x
+- npm >= 6.x
+- MySQL/MariaDB >= 5.7
+
+### Installation
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd web-app
+
+# Install all dependencies (frontend + backend)
+npm install
+
+# Setup database
+# 1. Create MySQL database named 'mentas_tobacco_traceability'
+# 2. Update backend/.env with your database credentials
+
+# Run database migrations
+npm run db:migrate
+
+# Start both frontend & backend servers
+npm run dev
+```
+
+**Access the application:**
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:3000
+- API Health Check: http://localhost:3000/health
+
+---
+
+## 📁 Project Structure (Monorepo)
+
+```
+web-app/
+├── backend/                    # Backend API (Node.js + Express)
+│   ├── src/
+│   │   ├── config/            # Database configuration
+│   │   ├── controllers/       # Business logic
+│   │   ├── middleware/        # Validation & error handling
+│   │   ├── migrations/        # Database migrations
+│   │   ├── models/            # Sequelize models
+│   │   ├── routes/            # API routes
+│   │   └── server.js          # Express server
+│   ├── .env                   # Backend config
+│   ├── API_DOCUMENTATION.md   # API reference
+│   └── README.md              # Backend docs
+├── src/                       # Frontend React app
+├── public/                    # Static assets
+├── package.json               # Merged dependencies
+└── MONOREPO_SETUP.md         # Monorepo guide
+```
 
 ---
 
@@ -218,48 +293,171 @@ graph TD
 
 ---
 
-## 🛠️ Tech Stack
+## � API Integration
 
-### **Frontend Core**
-- **⚛️ React 18.0+**: Modern UI library dengan concurrent features
-- **📘 TypeScript 5.0+**: Type-safe development dengan IntelliSense yang kuat
-- **⚡ Vite**: Lightning-fast build tool dan development server
-- **🎨 Tailwind CSS**: Utility-first CSS framework dengan design system
+### Service Layer Architecture
 
-### **UI & Styling**
-- **🎭 Theme Management**: Custom dark/light mode system dengan localStorage
-- **📱 Responsive Design**: Mobile-first approach dengan breakpoint optimization
-- **🎨 Glass Morphism**: Modern UI effects dengan backdrop blur
-- **🎯 Component Library**: Custom component library dengan TypeScript
+Sistem menggunakan **3-layer architecture** untuk frontend-backend communication:
 
-### **Navigation & Routing**
-- **🗺️ React Router**: Client-side routing untuk SPA
-- **🎮 Custom Controllers**: Navigation controller dengan redirect handling
-- **🔗 Deep Linking**: URL-based navigation dengan state preservation
+```
+UI Layer (PetaniPageNew.tsx)
+      ↓
+Business Logic Layer (petaniService.ts)
+      ↓
+HTTP Client Layer (petaniApiService.ts)
+      ↓
+Backend API (Express + Sequelize)
+      ↓
+MySQL Database
+```
 
-### **Maps & Visualization**
-- **🗺️ Leaflet**: Open-source interactive maps
-- **⚛️ React Leaflet**: React integration untuk Leaflet
-- **📊 Chart Libraries**: Data visualization components
+### Type Safety dengan Mapper Functions
 
-### **State Management**
-- **🔗 React Context**: Global state management
-- **🪝 Custom Hooks**: Encapsulated state logic
-- **💾 localStorage**: Persistent data storage
+Frontend dan backend menggunakan naming convention yang berbeda:
+- **Frontend**: camelCase (e.g., `nama`, `statusAktif`)
+- **Backend**: snake_case (e.g., `nama_lengkap`, `status`)
 
-### **Development Tools**
-- **🔍 ESLint**: Code linting dan quality assurance
-- **🎨 PostCSS**: CSS processing dengan Autoprefixer
-- **🔧 TypeScript Strict Mode**: Enhanced type checking
-- **📦 Module Resolution**: Path mapping dan imports optimization
+Mapper functions otomatis mengkonversi data:
 
-### **Build & Deployment**
-- **🐳 Docker**: Containerization untuk consistent deployment
-- **🔄 Docker Compose**: Multi-container orchestration
-- **🌐 Nginx**: High-performance web server
-- **☁️ Vercel Ready**: Optimized untuk cloud deployment
+```typescript
+// Backend → Frontend
+mapBackendToFrontend(backend: PetaniBackend): Petani
+
+// Frontend → Backend  
+mapFrontendToBackend(petani: Partial<Petani>): Partial<PetaniBackend>
+```
+
+### API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/petani` | Get all petani (with pagination) |
+| GET | `/api/petani/stats` | Get statistics |
+| GET | `/api/petani/:id` | Get petani by ID |
+| POST | `/api/petani` | Create new petani |
+| PUT | `/api/petani/:id` | Update petani |
+| DELETE | `/api/petani/:id` | Delete petani |
+
+### Example Usage
+
+```typescript
+// Get all petani
+const result = await petaniService.getAllPetani({
+  page: 1,
+  limit: 10,
+  search: 'John',
+  statusAktif: true
+});
+
+// Create new petani
+const newPetani = await petaniService.createPetani({
+  nik: '3578123456789012',
+  nama: 'John Doe',
+  tanggalLahir: '1990-01-01',
+  jenisKelamin: 'L',
+  alamat: 'Jl. Contoh No. 123',
+  // ... fields lainnya
+});
+
+// Update petani
+await petaniService.updatePetani('101', {
+  nama: 'John Doe Updated'
+});
+
+// Delete petani
+await petaniService.deletePetani('101');
+```
+
+**📖 Detailed API Documentation**: See [INTEGRATION.md](INTEGRATION.md)
 
 ---
+
+## �🛠️ Tech Stack
+
+### **Frontend**
+- **⚛️ React 18.0+**: Modern UI library dengan concurrent features
+- **📘 TypeScript 5.0+**: Type-safe development
+- **⚡ Vite 6.4+**: Lightning-fast build tool
+- **🎨 Tailwind CSS 4.1+**: Utility-first CSS framework
+- **🗺️ Leaflet**: Interactive maps
+- **🎭 Framer Motion**: Animation library
+
+### **Backend API**
+- **� Node.js**: JavaScript runtime
+- **⚡ Express 4.21+**: Web framework
+- **🗄️ Sequelize 6.37+**: ORM for MySQL
+- **💾 MySQL2**: Database driver
+- **✅ express-validator**: Request validation
+- **🔐 CORS**: Cross-origin resource sharing
+- **� dotenv**: Environment configuration
+
+### **Development Tools**
+- **� ESLint 9.39+**: Code linting
+- **🎨 Prettier**: Code formatting
+- **🔄 nodemon**: Backend hot reload
+- **⚡ concurrently**: Run multiple processes
+- **📊 sequelize-cli**: Database migrations
+
+### **Database**
+- **�️ MySQL/MariaDB 5.7+**: Relational database
+- **📋 Migrations**: Version control for database schema
+- **� Indexes**: Optimized queries
+
+---
+
+## 📦 Available Scripts
+
+### Development
+
+```bash
+# Run both frontend & backend (RECOMMENDED)
+npm run dev
+
+# Run frontend only
+npm run dev:frontend
+
+# Run backend only  
+npm run dev:backend
+```
+
+### Production
+
+```bash
+# Build frontend
+npm run build
+
+# Start backend production
+npm run start:backend
+```
+
+### Database
+
+```bash
+# Run migrations
+npm run db:migrate
+
+# Undo last migration
+npm run db:migrate:undo
+
+# Run seeders
+npm run db:seed
+```
+
+### Testing & Quality
+
+```bash
+# Test API endpoints
+npm run test:api
+
+# Type checking
+npm run type-check
+
+# Lint code
+npm run lint
+
+# Preview production build
+npm run preview
+```
 
 ---
 
