@@ -11,6 +11,8 @@ const kelompokTaniRoutes = require('./routes/kelompokTaniRoutes');
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.HOST || '0.0.0.0';
+const API_BASE_URL = process.env.API_BASE_URL || `http://localhost:${PORT}`;
 
 // CORS configuration
 const corsOptions = {
@@ -58,11 +60,11 @@ const startServer = async () => {
     await testConnection();
     
     // Start listening
-    app.listen(PORT, () => {
+    app.listen(PORT, HOST, () => {
       console.log('='.repeat(50));
-      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🚀 Server running on ${HOST}:${PORT}`);
       console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`🌐 API Base URL: http://localhost:${PORT}`);
+      console.log(`🌐 API Base URL: ${API_BASE_URL}`);
       console.log(`✅ CORS enabled for: ${corsOptions.origin}`);
       console.log('='.repeat(50));
       console.log('Available endpoints:');
