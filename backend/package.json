@@ -1,0 +1,23 @@
+{
+  "name": "mentas-backend-api",
+  "version": "1.0.0",
+  "description": "Backend API for MENTAS Tobacco Traceability System",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "db:migrate": "sequelize-cli db:migrate",
+    "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:seed": "sequelize-cli db:seed:all"
+  },
+  "keywords": [
+    "tobacco",
+    "traceability",
+    "api",
+    "express",
+    "sequelize"
+  ],
+  "author": "MENTAS - Universitas Brawijaya",
+  "license": "ISC"
+}
